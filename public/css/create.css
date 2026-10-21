@@ -1,0 +1,409 @@
+/* =========================================================
+   ADD ACCOUNT PAGE
+   TMTA POS
+   ========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f6f8;
+    color: #111827;
+    min-height: 100vh;
+}
+
+
+/* =========================================================
+   PAGE CONTAINER
+   ========================================================= */
+
+.page-container {
+    min-height: 100vh;
+    padding: 48px 34px;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.page-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    margin-bottom: 38px;
+}
+
+.back-btn {
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #ffffff;
+    color: #111827;
+
+    border: 1px solid #d9dde2;
+    border-radius: 9px;
+
+    text-decoration: none;
+
+    font-size: 20px;
+
+    transition: 0.2s ease;
+}
+
+.back-btn:hover {
+    background: #f0f2f4;
+}
+
+.header-text h1 {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 8px;
+}
+
+.header-text p {
+    font-size: 16px;
+    color: #6b7280;
+}
+
+
+/* =========================================================
+   FORM CARD
+   ========================================================= */
+
+.form-card {
+    width: 100%;
+    max-width: 1060px;
+
+    margin: 0 auto;
+
+    background: #ffffff;
+
+    border: 1px solid #e0e3e7;
+    border-radius: 12px;
+
+    padding: 34px 36px;
+
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+
+/* =========================================================
+   CARD TITLE
+   ========================================================= */
+
+.form-card h2 {
+    font-size: 21px;
+    font-weight: 700;
+
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+
+    border-bottom: 1px solid #e5e7eb;
+}
+
+
+/* =========================================================
+   FORM GRID
+   ========================================================= */
+
+.form-grid {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    column-gap: 24px;
+    row-gap: 20px;
+}
+
+
+/* =========================================================
+   FORM GROUP
+   ========================================================= */
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+
+/* =========================================================
+   LABEL
+   ========================================================= */
+
+.form-group label {
+    font-size: 14px;
+    font-weight: 700;
+
+    margin-bottom: 10px;
+
+    color: #111827;
+}
+
+.required {
+    color: #ef4444;
+}
+
+
+/* =========================================================
+   INPUT
+   ========================================================= */
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    height: 52px;
+
+    padding: 0 15px;
+
+    border: 1px solid #d7dbe0;
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    color: #111827;
+
+    font-size: 16px;
+
+    outline: none;
+
+    transition: 0.2s ease;
+}
+
+.form-group input::placeholder {
+    color: #9ca3af;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #9ca3af;
+
+    box-shadow: 0 0 0 2px rgba(156, 163, 175, 0.12);
+}
+
+
+/* =========================================================
+   PASSWORD NOTE
+   ========================================================= */
+
+.form-note {
+    margin-top: 8px;
+
+    font-size: 13px;
+
+    color: #6b7280;
+}
+
+
+/* =========================================================
+   ERROR MESSAGE
+   ========================================================= */
+
+.error-message {
+    margin-bottom: 20px;
+
+    padding: 12px 15px;
+
+    border-radius: 7px;
+
+    background: #fef2f2;
+
+    border: 1px solid #fecaca;
+
+    color: #b91c1c;
+
+    font-size: 14px;
+}
+
+.error-message ul {
+    margin-left: 18px;
+}
+
+.input-error {
+    border-color: #ef4444 !important;
+}
+
+
+/* =========================================================
+   FORM FOOTER
+   ========================================================= */
+
+.form-footer {
+    display: flex;
+
+    justify-content: flex-end;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin-top: 36px;
+
+    padding-top: 28px;
+
+    border-top: 1px solid #e5e7eb;
+}
+
+
+/* =========================================================
+   CANCEL BUTTON
+   ========================================================= */
+
+.cancel-btn {
+    height: 48px;
+
+    padding: 0 22px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #ffffff;
+
+    color: #111827;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 8px;
+
+    text-decoration: none;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.cancel-btn:hover {
+    background: #f3f4f6;
+}
+
+
+/* =========================================================
+   CREATE ACCOUNT BUTTON
+   ========================================================= */
+
+.create-btn {
+    height: 48px;
+
+    padding: 0 20px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    background: #111827;
+
+    color: #ffffff;
+
+    border: 1px solid #111827;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.create-btn:hover {
+    background: #000000;
+    border-color: #000000;
+}
+
+.create-btn i {
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 800px) {
+
+    .page-container {
+        padding: 30px 20px;
+    }
+
+    .form-card {
+        padding: 26px 24px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-group.full-width {
+        grid-column: auto;
+    }
+
+    .header-text h1 {
+        font-size: 27px;
+    }
+
+}
+
+
+@media (max-width: 500px) {
+
+    .page-container {
+        padding: 20px 14px;
+    }
+
+    .page-header {
+        gap: 12px;
+        margin-bottom: 25px;
+    }
+
+    .back-btn {
+        width: 42px;
+        height: 42px;
+    }
+
+    .header-text h1 {
+        font-size: 24px;
+    }
+
+    .header-text p {
+        font-size: 14px;
+    }
+
+    .form-card {
+        padding: 22px 18px;
+    }
+
+    .form-card h2 {
+        font-size: 19px;
+    }
+
+    .form-footer {
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+
+    .cancel-btn,
+    .create-btn {
+        width: 100%;
+    }
+
+}

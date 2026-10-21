@@ -1,0 +1,234 @@
+/* ========================================
+   ORDER PAGE
+======================================== */
+
+.order-content {
+    width: 100%;
+}
+
+
+/* ========================================
+   ORDER TOP
+======================================== */
+
+.order-top {
+    display: flex;
+    align-items: center;
+
+    padding-top: 40px;
+    padding-left: 38px;
+
+    gap: 45px;
+}
+
+.order-menu-button {
+    width: 35px;
+
+    padding: 0;
+
+    border: none;
+
+    background: transparent;
+
+    color: #29272d;
+
+    font-size: 34px;
+
+    line-height: 1;
+
+    cursor: pointer;
+}
+
+
+/* ========================================
+   ORDER SEARCH
+======================================== */
+
+.order-search {
+    width: 605px;
+    height: 67px;
+
+    border-radius: 40px;
+
+    background: #eee8f5;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 32px;
+}
+
+.order-search-placeholder {
+    flex: 1;
+
+    color: #565260;
+
+    font-size: 20px;
+}
+
+.order-search-icon {
+    color: #494653;
+
+    font-size: 35px;
+
+    line-height: 1;
+
+    transform: rotate(-20deg);
+}
+
+
+/* ========================================
+   ORDER CATEGORIES
+======================================== */
+
+.order-categories {
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+
+    margin-top: 52px;
+    margin-left: 38px;
+}
+
+.order-category {
+    height: 61px;
+
+    padding: 0 34px;
+
+    border: 1px solid #29272d;
+
+    border-radius: 9px;
+
+    background: #ffffff;
+
+    color: #29272d;
+
+    font-size: 19px;
+
+    cursor: pointer;
+
+    white-space: nowrap;
+
+    transition: 0.2s ease;
+}
+
+.order-category:hover {
+    background: #f1edf4;
+}
+
+.order-category.selected {
+    background: #28272a;
+
+    border-color: #28272a;
+
+    color: #ffffff;
+}
+
+
+/* ========================================
+   ORDER PRODUCTS
+======================================== */
+
+.order-products {
+    display: grid;
+
+    grid-template-columns: repeat(2, minmax(300px, 1fr));
+
+    gap: 50px;
+
+    padding: 40px 50px 50px;
+}
+
+
+/* Product card */
+
+.order-product-card {
+    height: 485px;
+
+    border-radius: 29px;
+
+    background: #eee9f3;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+}
+
+
+/* ========================================
+   ORDER PRODUCT PLACEHOLDER
+======================================== */
+
+.order-product-image {
+    position: relative;
+
+    width: 230px;
+    height: 230px;
+}
+
+
+/* Triangle */
+
+.order-product-triangle {
+    position: absolute;
+
+    width: 0;
+    height: 0;
+
+    top: 8px;
+    left: 67px;
+
+    border-left: 51px solid transparent;
+    border-right: 51px solid transparent;
+    border-bottom: 91px solid #c8c4cc;
+
+    transform: rotate(-2deg);
+}
+
+
+/* Gear */
+
+.order-product-gear {
+    position: absolute;
+
+    width: 90px;
+    height: 90px;
+
+    left: 18px;
+    bottom: 25px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #c8c4cc;
+
+    font-size: 82px;
+
+    line-height: 1;
+}
+
+
+/* Square */
+
+.order-product-square {
+    position: absolute;
+
+    width: 92px;
+    height: 92px;
+
+    right: 8px;
+    bottom: 21px;
+
+    background: #c8c4cc;
+
+    border-radius: 17px;
+
+    transform: rotate(4deg);
+}
+
+
+/* ========================================

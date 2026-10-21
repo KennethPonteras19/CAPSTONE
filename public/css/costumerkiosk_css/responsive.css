@@ -1,0 +1,263 @@
+/* ========================================
+   LARGE DESKTOP
+======================================== */
+
+@media (max-width: 1100px) {
+
+    .sidebar {
+        width: 200px;
+    }
+
+    .main-content {
+        margin-left: 200px;
+
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+    .category-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .order-top {
+        padding-left: 25px;
+        gap: 25px;
+    }
+
+    .order-search {
+        width: 500px;
+    }
+
+    .order-products {
+        gap: 25px;
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+}
+
+/* ========================================
+   MEDIUM DESKTOP
+======================================== */
+
+@media (max-width: 1100px) {
+
+    .sidebar {
+        width: 200px;
+    }
+
+    .main-content {
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+    .category-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .order-top {
+        padding-left: 25px;
+
+        gap: 25px;
+    }
+
+    .order-search {
+        width: 500px;
+    }
+
+    .order-products {
+        gap: 25px;
+
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+}
+
+
+/* ========================================
+   TABLET
+======================================== */
+
+@media (max-width: 750px) {
+
+    .sidebar {
+        width: 80px;
+    }
+
+    .main-content {
+        margin-left: 80px;
+
+        padding: 20px;
+    }
+
+    .brand h2 {
+        display: none;
+    }
+
+    .brand-icon {
+        transform: scale(0.7);
+    }
+
+    .nav-item {
+        justify-content: center;
+        padding: 0;
+    }
+
+    .nav-item span {
+        display: none;
+    }
+
+    .sidebar-footer {
+        display: none;
+    }
+
+    .hero {
+        height: 280px;
+    }
+
+    .hero h1 {
+        font-size: 38px;
+    }
+
+    .hero p {
+        font-size: 14px;
+    }
+
+    .category-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .order-top {
+        padding-left: 20px;
+        gap: 20px;
+    }
+
+    .order-search {
+        width: 100%;
+    }
+
+    .order-categories {
+        margin-left: 20px;
+        overflow-x: auto;
+        padding-bottom: 5px;
+    }
+
+    .order-category {
+        padding: 0 22px;
+    }
+
+    .order-products {
+        grid-template-columns: 1fr;
+
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+}
+
+
+/* ========================================
+   MOBILE
+======================================== */
+
+@media (max-width: 500px) {
+
+    .sidebar {
+        width: 65px;
+    }
+
+    .main-content {
+        margin-left: 65px;
+
+        padding: 15px;
+    }
+
+    .hero {
+        height: 230px;
+        border-radius: 18px;
+    }
+
+    .hero h1 {
+        font-size: 30px;
+    }
+
+    .hero p {
+        font-size: 12px;
+    }
+
+    .section-heading h2 {
+        font-size: 25px;
+    }
+
+    .category-card {
+        min-height: 230px;
+    }
+
+    .order-top {
+        padding-top: 25px;
+        padding-left: 15px;
+    }
+
+    .order-search {
+        height: 52px;
+    }
+
+    .order-search input {
+        font-size: 15px;
+    }
+
+    .order-categories {
+        margin-top: 25px;
+        margin-left: 15px;
+    }
+
+    .order-category {
+        height: 45px;
+
+        padding: 0 15px;
+
+        font-size: 14px;
+    }
+
+    .order-products {
+        grid-template-columns: 1fr;
+
+        padding: 20px 15px;
+    }
+
+    .product-heading {
+        margin-top: 25px;
+    }
+
+    .product-heading h2 {
+        font-size: 19px;
+    }
+
+    .product-heading span {
+        font-size: 12px;
+    }
+
+    .product-card {
+        min-height: 430px;
+    }
+
+    .product-image {
+        height: 240px;
+    }
+
+    .more-main {
+        padding: 25px;
+    }
+
+    .more-logo {
+        width: 100%;
+        height: 210px;
+    }
+
+    .company-name {
+        font-size: 22px;
+    }
+
+}
+

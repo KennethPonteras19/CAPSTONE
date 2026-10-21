@@ -1,0 +1,20 @@
+.topbar {
+    flex-wrap: wrap;
+    gap: 24px;
+}
+
+.page-title {
+    flex: 1 1 280px;
+}
+
+@media (min-width: 901px) {
+    .sidebar {
+        padding-bottom: 90px;
+    }
+}
+
+@media (max-width: 900px) {
+    .page-title {
+        flex-basis: auto;
+    }
+}

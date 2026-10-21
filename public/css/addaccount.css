@@ -1,0 +1,665 @@
+/* =========================================================
+   TMTA POS - ADD ACCOUNT / USER MANAGEMENT
+   public/css/addaccount.css
+   ========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f5f6f8;
+    color: #222;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+.sidebar {
+    width: 240px;
+    height: 100vh;
+
+    background: #1f1f1f;
+    color: #fff;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    padding: 14px 14px 16px;
+
+    display: flex;
+    flex-direction: column;
+
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+.logo-section {
+    text-align: center;
+
+    padding: 4px 4px 10px;
+
+    color: #fff;
+
+    border-bottom: 1px solid #444;
+
+    margin-bottom: 10px;
+
+    flex: 0 0 auto;
+}
+
+.logo-section a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    text-decoration: none;
+    color: #fff;
+
+    padding: 6px 8px;
+
+    border-radius: 8px;
+
+    transition: 0.3s;
+}
+
+.logo-section a:hover {
+    background: #2c2c2c;
+}
+
+.logo {
+    width: 62px;
+    height: auto;
+
+    object-fit: contain;
+}
+
+.system-name {
+    font-size: 14px;
+    font-weight: 700;
+
+    letter-spacing: 1px;
+
+    margin: 0;
+}
+
+/* =========================================================
+   MENU
+   ========================================================= */
+
+.menu-list {
+    list-style: none;
+
+    margin: 12px 0 0;
+    padding: 0;
+
+    flex: 1 1 auto;
+
+    min-height: 0;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.menu-list li {
+    margin-bottom: 10px;
+}
+
+.menu-list a {
+    display: flex;
+    align-items: center;
+
+    text-decoration: none;
+
+    color: #fff;
+
+    padding: 10px 12px;
+
+    border-radius: 8px;
+
+    transition: 0.3s;
+
+    font-size: 16px;
+}
+
+.menu-list a:hover {
+    background: #444;
+}
+
+.menu-list .active a {
+    background: #444;
+}
+
+.menu-list i {
+    margin-right: 10px;
+}
+
+/* =========================================================
+   LOGOUT
+   ========================================================= */
+
+.logout-section {
+    margin-top: auto;
+
+    padding-top: 10px;
+
+    border-top: 1px solid #333;
+
+    flex: 0 0 auto;
+}
+
+.logout-btn {
+    width: 100%;
+
+    background: #ff4d4d;
+
+    border: none;
+
+    padding: 10px 12px;
+
+    color: #fff;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    text-align: left;
+
+    transition: 0.3s;
+
+    font-size: 14px;
+}
+
+.logout-btn:hover {
+    background: #e53935;
+}
+
+.logout-btn i {
+    margin-right: 8px;
+}
+
+/* =========================================================
+   MAIN CONTENT
+   ========================================================= */
+
+.main-content {
+    margin-left: 240px;
+
+    width: calc(100% - 240px);
+
+    padding: 20px 24px;
+}
+
+/* =========================================================
+   TOPBAR
+   ========================================================= */
+
+.topbar {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 24px;
+}
+
+.search-wrap {
+    width: 420px;
+    max-width: 50%;
+
+    height: 42px;
+
+    background: #fff;
+
+    border: 1px solid #e2e2e2;
+
+    border-radius: 8px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 14px;
+
+    transition: 0.2s ease;
+}
+
+.search-wrap:focus-within {
+    border-color: #333;
+
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
+}
+
+.search-wrap i {
+    color: #9ca3af;
+
+    font-size: 13px;
+
+    margin-right: 9px;
+}
+
+.search-wrap input {
+    border: none;
+    outline: none;
+
+    width: 100%;
+
+    font-size: 13px;
+
+    background: transparent;
+
+    color: #333;
+}
+
+.search-wrap input::placeholder {
+    color: #aaa;
+}
+
+.top-right {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+}
+
+/* =========================================================
+   DATE & ADMIN
+   ========================================================= */
+
+.datetime {
+    background: #222;
+
+    color: #fff;
+
+    padding: 8px 12px;
+
+    border-radius: 8px;
+
+    font-size: 12px;
+
+    letter-spacing: 0.5px;
+}
+
+.admin-pill {
+    background: #e5e7eb;
+
+    color: #111827;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    padding: 7px 11px;
+
+    border-radius: 20px;
+}
+
+/* =========================================================
+   TITLE
+   ========================================================= */
+
+.title-row {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 18px;
+}
+
+.title-row h1 {
+    font-size: 28px;
+
+    font-weight: 700;
+
+    color: #222;
+}
+
+/* =========================================================
+   ADD ACCOUNT BUTTON
+   ========================================================= */
+
+.add-btn {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    border: none;
+
+    background: #222;
+
+    color: #fff;
+
+    border-radius: 7px;
+
+    padding: 10px 16px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+.add-btn:hover {
+    background: #444;
+
+    transform: translateY(-1px);
+}
+
+.add-btn i {
+    font-size: 12px;
+}
+
+/* =========================================================
+   TABLE CONTAINER
+   ========================================================= */
+
+.table-wrap {
+    background: #fff;
+
+    border: 1px solid #e5e5e5;
+
+    border-radius: 10px;
+
+    overflow: auto;
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    min-width: 980px;
+}
+
+thead {
+    background: #fafafa;
+}
+
+thead th {
+    text-align: left;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    color: #555;
+
+    border-bottom: 1px solid #e5e7eb;
+
+    padding: 13px 14px;
+
+    white-space: nowrap;
+}
+
+tbody td {
+    font-size: 13px;
+
+    color: #444;
+
+    border-bottom: 1px solid #f0f0f0;
+
+    padding: 13px 14px;
+
+    white-space: nowrap;
+}
+
+tbody tr {
+    transition: background 0.2s ease;
+}
+
+tbody tr:hover {
+    background: #fafafa;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.center {
+    text-align: center;
+}
+
+/* =========================================================
+   EDIT BUTTON
+   ========================================================= */
+
+.edit-btn {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 6px;
+
+    padding: 7px 12px;
+
+    background: #fff;
+
+    color: #333;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 6px;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+.edit-btn:hover {
+    background: #222;
+
+    color: #fff;
+
+    border-color: #222;
+
+    transform: translateY(-1px);
+}
+
+.edit-btn i {
+    font-size: 11px;
+}
+
+/* =========================================================
+   EMPTY USERS
+   ========================================================= */
+
+.no-users {
+    text-align: center;
+
+    color: #888;
+
+    padding: 35px !important;
+
+    font-size: 13px;
+}
+
+/* =========================================================
+   SUCCESS MESSAGE
+   ========================================================= */
+
+.success-message {
+    background: #f3f3f3;
+
+    border: 1px solid #ddd;
+
+    color: #333;
+
+    padding: 12px 15px;
+
+    border-radius: 7px;
+
+    font-size: 13px;
+
+    margin-bottom: 18px;
+}
+
+/* =========================================================
+   ERROR MESSAGE
+   ========================================================= */
+
+.error-message {
+    color: #d33;
+
+    font-size: 12px;
+
+    margin-top: 5px;
+}
+
+/* =========================================================
+   RESPONSIVE - 992PX
+   ========================================================= */
+
+@media (max-width: 992px) {
+
+    .sidebar {
+        width: 210px;
+    }
+
+    .main-content {
+        margin-left: 210px;
+
+        width: calc(100% - 210px);
+
+        padding: 18px;
+    }
+
+    .search-wrap {
+        width: 360px;
+    }
+}
+
+/* =========================================================
+   RESPONSIVE - 900PX
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .layout {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        position: relative;
+
+        width: 100%;
+        height: auto;
+
+        overflow: visible;
+    }
+
+    .menu-list {
+        overflow: visible;
+
+        max-height: none;
+    }
+
+    .logout-section {
+        border-top: none;
+
+        padding-top: 8px;
+
+        margin-top: 10px;
+    }
+
+    .main-content {
+        margin-left: 0;
+
+        width: 100%;
+
+        padding: 18px;
+    }
+
+    .topbar {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 12px;
+    }
+
+    .search-wrap {
+        width: 100%;
+
+        max-width: 100%;
+    }
+
+    .top-right {
+        width: 100%;
+
+        justify-content: flex-end;
+    }
+
+    .title-row {
+        gap: 15px;
+    }
+}
+
+/* =========================================================
+   RESPONSIVE - 600PX
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    .main-content {
+        padding: 14px;
+    }
+
+    .title-row {
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+    .title-row h1 {
+        font-size: 24px;
+    }
+
+    .add-btn {
+        width: 100%;
+    }
+
+    .top-right {
+        justify-content: space-between;
+    }
+
+    .datetime {
+        font-size: 11px;
+    }
+}

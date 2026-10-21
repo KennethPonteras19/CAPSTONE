@@ -1,0 +1,398 @@
+/* =========================================================
+   TMTA POS - EDIT ACCOUNT
+   public/css/editaccount.css
+   ========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f5f6f8;
+    color: #222;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+.edit-account-page {
+    min-height: 100vh;
+    padding: 35px;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.edit-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+}
+
+.edit-header-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* =========================================================
+   BACK BUTTON
+   ========================================================= */
+
+.back-btn {
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #ffffff;
+    border: 1px solid #dddddd;
+    border-radius: 7px;
+
+    color: #333;
+    font-size: 15px;
+
+    transition: 0.2s ease;
+}
+
+.back-btn:hover {
+    background: #222;
+    color: #fff;
+    border-color: #222;
+}
+
+/* =========================================================
+   TITLE
+   ========================================================= */
+
+.edit-title h1 {
+    font-size: 27px;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 5px;
+}
+
+.edit-title p {
+    color: #777;
+    font-size: 14px;
+}
+
+/* =========================================================
+   FORM CARD
+   ========================================================= */
+
+.edit-form-card {
+    max-width: 900px;
+    margin: 0 auto;
+
+    background: #fff;
+
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+
+    padding: 30px;
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+/* =========================================================
+   SECTION
+   ========================================================= */
+
+.form-section {
+    margin-bottom: 30px;
+}
+
+.form-section-title {
+    font-size: 17px;
+    font-weight: 700;
+
+    padding-bottom: 12px;
+    margin-bottom: 20px;
+
+    border-bottom: 1px solid #eeeeee;
+}
+
+/* =========================================================
+   FORM GRID
+   ========================================================= */
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+/* =========================================================
+   LABEL
+   ========================================================= */
+
+.form-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #444;
+
+    margin-bottom: 8px;
+}
+
+.required {
+    color: #d33;
+}
+
+/* =========================================================
+   INPUTS
+   ========================================================= */
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    height: 44px;
+
+    padding: 0 13px;
+
+    background: #fff;
+
+    border: 1px solid #d8d8d8;
+    border-radius: 7px;
+
+    outline: none;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+
+    color: #333;
+
+    transition: 0.2s ease;
+}
+
+.form-group input::placeholder {
+    color: #aaa;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #333;
+
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.06);
+}
+
+/* =========================================================
+   PASSWORD
+   ========================================================= */
+
+.password-wrapper {
+    position: relative;
+}
+
+.password-wrapper input {
+    padding-right: 45px;
+}
+
+.password-toggle {
+    position: absolute;
+
+    right: 13px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    background: transparent;
+    border: none;
+
+    color: #777;
+
+    cursor: pointer;
+}
+
+.password-toggle:hover {
+    color: #222;
+}
+
+/* =========================================================
+   HELP TEXT
+   ========================================================= */
+
+.help-text {
+    margin-top: 6px;
+
+    font-size: 12px;
+    color: #888;
+}
+
+/* =========================================================
+   ERROR
+   ========================================================= */
+
+.error-message {
+    margin-top: 6px;
+
+    font-size: 12px;
+    color: #d33;
+}
+
+.input-error {
+    border-color: #d33 !important;
+}
+
+/* =========================================================
+   SUCCESS
+   ========================================================= */
+
+.success-message {
+    background: #f3f3f3;
+
+    border: 1px solid #dddddd;
+    border-radius: 7px;
+
+    padding: 12px 15px;
+
+    color: #333;
+
+    font-size: 13px;
+
+    margin-bottom: 20px;
+}
+
+/* =========================================================
+   FORM ACTIONS
+   ========================================================= */
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    gap: 10px;
+
+    padding-top: 25px;
+    margin-top: 10px;
+
+    border-top: 1px solid #eeeeee;
+}
+
+/* =========================================================
+   CANCEL BUTTON
+   ========================================================= */
+
+.cancel-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    height: 42px;
+
+    padding: 0 18px;
+
+    background: #fff;
+
+    border: 1px solid #cccccc;
+    border-radius: 7px;
+
+    color: #444;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    transition: 0.2s ease;
+}
+
+.cancel-btn:hover {
+    background: #f2f2f2;
+}
+
+/* =========================================================
+   UPDATE BUTTON
+   ========================================================= */
+
+.update-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    height: 42px;
+
+    padding: 0 20px;
+
+    background: #222;
+    color: #fff;
+
+    border: 1px solid #222;
+    border-radius: 7px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.update-btn:hover {
+    background: #444;
+    border-color: #444;
+
+    transform: translateY(-1px);
+}
+
+.update-btn i {
+    margin-right: 8px;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    .edit-account-page {
+        padding: 20px;
+    }
+
+    .edit-form-card {
+        padding: 22px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-group.full-width {
+        grid-column: auto;
+    }
+
+    .edit-title h1 {
+        font-size: 23px;
+    }
+
+    .form-actions {
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+
+    .cancel-btn,
+    .update-btn {
+        width: 100%;
+    }
+}

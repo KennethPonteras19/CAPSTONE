@@ -1,0 +1,10 @@
+- [x] Review current auth/account seeders against requested credentials
+- [x] Build update plan and get user confirmation
+- [x] Update AdminAccountSeeder to match by username for reliable credential reset
+- [x] Update CustomerAccountSeeder to match by username for reliable credential reset
+- [x] Update SuperAdminSeeder to match by username for reliable credential reset
+- [x] Reseed database accounts with php artisan db:seed
+- [ ] Fix admin login flow to use username instead of email
+- [ ] Update admin login UI field from email to username
+- [ ] Run full tests after admin login fix
+- [ ] Finalize with testing status summary

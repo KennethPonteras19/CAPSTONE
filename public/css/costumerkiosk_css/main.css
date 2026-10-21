@@ -1,0 +1,43 @@
+/* =========================================================
+   TMTA CONSTRUCTION SUPPLY
+   MAIN CSS
+   ========================================================= */
+
+/* BASE */
+@import url("base.css");
+
+/* PAGE STYLES */
+@import url("home.css");
+@import url("order.css");
+@import url("more.css");
+
+/* SHARED / RESPONSIVE */
+@import url("responsive.css");
+@import url("products.css");
+
+/* MODALS */
+@import url("modal.css");
+@import url("add-to-cart-popup.css");
+
+/* CART */
+@import url("cart-bar.css");
+@import url("cart-page.css");
+
+/* POS REDESIGN */
+@import url("pos-redesign.css");
+
+/* CHECKOUT */
+@import url("checkout.css");
+
+.product-image .product-photo,
+.modal-product-image .product-photo,
+.cart-item-image .product-photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    background: #fff;
+    z-index: 1;
+}

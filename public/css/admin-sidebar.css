@@ -1,0 +1,207 @@
+/* Shared Admin, Staff and Super Admin navigation. Customer styles are separate. */
+.admin-workspace {
+    --admin-sidebar-width: 240px;
+    margin: 0;
+}
+
+.admin-sidebar,
+.admin-sidebar * {
+    box-sizing: border-box;
+}
+
+.admin-sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    width: var(--admin-sidebar-width);
+    height: 100vh;
+    height: 100dvh;
+    padding: 14px 14px 16px;
+    overflow-y: auto;
+    background: #1f1f1f;
+    color: #fff;
+    font: 400 16px/20px Arial, Helvetica, sans-serif;
+    letter-spacing: normal;
+    text-align: left;
+}
+
+.admin-sidebar a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border: 0;
+    border-radius: 8px;
+    color: #fff;
+    background: transparent;
+    font: inherit;
+    text-decoration: none;
+    transition: background-color .3s;
+}
+
+.admin-sidebar a:hover,
+.admin-sidebar-menu .active a {
+    background: #444;
+}
+
+.admin-sidebar a:focus-visible,
+.admin-sidebar-logout button:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: -2px;
+}
+
+.admin-sidebar-brand {
+    flex: 0 0 auto;
+    margin: 0 0 10px;
+    padding: 4px 4px 10px;
+    border-bottom: 1px solid #444;
+    text-align: center;
+}
+
+.admin-sidebar-brand a {
+    gap: 0;
+}
+
+.admin-sidebar .admin-sidebar-logo {
+    flex: 0 0 62px;
+    width: 62px;
+    height: 62px;
+    margin: 0 0 4px;
+    object-fit: contain;
+}
+
+.admin-sidebar .admin-sidebar-name {
+    margin: 0;
+    padding: 0;
+    color: #fff;
+    font: 700 14px/20px Arial, Helvetica, sans-serif;
+    letter-spacing: 1px;
+    overflow-wrap: anywhere;
+}
+
+.admin-sidebar-menu {
+    flex: 1 1 auto;
+    min-height: 0;
+    margin: 12px 0 0;
+    padding: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    list-style: none;
+    scrollbar-width: thin;
+    scrollbar-color: #555 #1f1f1f;
+}
+
+.admin-sidebar-menu li {
+    margin: 0 0 10px;
+    padding: 0;
+    list-style: none;
+}
+
+.admin-sidebar-menu a {
+    min-height: 40px;
+}
+
+.admin-sidebar i {
+    flex: 0 0 16px;
+    width: 16px;
+    margin: 0;
+    font-size: 16px;
+    line-height: 20px;
+    text-align: center;
+}
+
+.admin-sidebar-logout {
+    flex: 0 0 auto;
+    margin-top: auto;
+    padding-top: 10px;
+    border-top: 1px solid #333;
+}
+
+.admin-sidebar-logout form {
+    margin: 0;
+    padding: 0;
+}
+
+.admin-sidebar-account {
+    display: grid;
+    gap: 4px;
+    padding: 4px 12px 12px;
+    font-size: 13px;
+    overflow-wrap: anywhere;
+}
+
+.admin-sidebar-account span {
+    color: #ccc;
+    font-size: 12px;
+}
+
+.admin-sidebar-logout button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    margin: 0;
+    padding: 10px 12px;
+    border: 0;
+    border-radius: 8px;
+    background: #ff4d4d;
+    color: #fff;
+    font: 400 13px/20px Arial, Helvetica, sans-serif;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color .3s;
+}
+
+.admin-sidebar-logout button:hover {
+    background: #e53935;
+}
+
+.admin-workspace .main,
+.admin-workspace .main-content,
+.admin-workspace .workspace-main {
+    box-sizing: border-box;
+    margin-left: var(--admin-sidebar-width);
+    width: calc(100% - var(--admin-sidebar-width));
+    min-width: 0;
+}
+
+@media (max-width: 768px) {
+    .admin-sidebar {
+        position: relative;
+        inset: auto;
+        width: 100%;
+        height: auto;
+        overflow: visible;
+    }
+
+    .admin-sidebar-menu {
+        flex: 0 0 auto;
+        overflow: visible;
+    }
+
+    .admin-workspace .layout {
+        flex-direction: column;
+    }
+
+    .admin-workspace .main,
+    .admin-workspace .main-content,
+    .admin-workspace .workspace-main {
+        margin-left: 0;
+        width: 100%;
+    }
+}
+
+@media print {
+    .admin-sidebar {
+        display: none;
+    }
+
+    .admin-workspace .main,
+    .admin-workspace .main-content,
+    .admin-workspace .workspace-main {
+        margin-left: 0;
+        width: 100%;
+    }
+}

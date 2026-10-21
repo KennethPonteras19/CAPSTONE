@@ -1,0 +1,11 @@
+.account-help { color: #64748b; line-height: 1.6; margin: 12px 0 22px; }
+.account-create-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 28px; max-width: 960px; }
+.account-create-card h2 { margin: 0 0 24px; font-size: 20px; }
+.account-create-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+.account-create-grid label { display: flex; flex-direction: column; gap: 9px; font-size: 14px; font-weight: 600; }
+.account-create-grid label[hidden] { display: none; }
+.account-create-grid input, .account-create-grid select { width: 100%; min-width: 0; box-sizing: border-box; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; font: inherit; }
+.account-create-grid input:focus, .account-create-grid select:focus { outline: 2px solid #6366f1; outline-offset: 2px; }
+.account-create-card .add-btn { border: 0; cursor: pointer; }
+.account-errors { background: #fef2f2; color: #991b1b; border-radius: 8px; padding: 16px 32px; margin-bottom: 22px; }
+@media (max-width: 700px) { .account-create-grid { grid-template-columns: 1fr; } .account-create-card { padding: 20px; } }

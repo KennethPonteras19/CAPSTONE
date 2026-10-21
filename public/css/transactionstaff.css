@@ -1,0 +1,51 @@
+/* FILTER */
+.filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.filter-btn {
+  background: #3498db;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* STATUS COLORS */
+.status-ok {
+  color: green;
+  font-weight: bold;
+}
+
+.status-pending {
+  color: orange;
+  font-weight: bold;
+}
+
+/* RECEIPT */
+.receipt-container {
+  width: 250px;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+.receipt-container hr {
+  border: 1px dashed #000;
+}
+
+/* PRINT BUTTON */
+button {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 6px;
+  background: #2ecc71;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.8;
+}

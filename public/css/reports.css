@@ -1,0 +1,426 @@
+/* ==================================================
+   REPORTS CSS 
+================================================== */
+
+/* GLOBAL */
+.print-summary { display: none; }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f6f9;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 240px;
+  height: 100vh;
+  background: #1f1f1f;
+  color: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 14px 14px 16px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+/* LOGO SECTION */
+.logo-section {
+  text-align: center;
+  padding: 4px 4px 10px;
+  color: white;
+  border-bottom: 1px solid #444;
+  margin-bottom: 10px;
+  flex: 0 0 auto;
+}
+
+.logo {
+  width: 62px;
+  margin-bottom: 4px;
+}
+
+.system-name {
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+/* MENU */
+.sidebar ul {
+  padding: 0;
+  margin: 0;
+  margin-top: 12px;
+  list-style: none;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.sidebar li {
+  margin-bottom: 10px;
+  list-style: none;
+}
+
+.sidebar a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: white;
+  padding: 10px 12px;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+
+.sidebar a:hover {
+  background: #444;
+}
+
+.sidebar .active a {
+  background: #444;
+}
+
+.sidebar i {
+  margin-right: 10px;
+}
+
+/* LOGOUT INSIDE SIDEBAR */
+.logout-section {
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px solid #333;
+  flex: 0 0 auto;
+}
+
+.logout-btn {
+  width: 100%;
+  background: #ff4d4d;
+  border: none;
+  padding: 10px;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* MAIN */
+.main {
+  margin-left: 240px;
+  padding: 20px;
+}
+
+/* PRINT BUTTON */
+.print-btn {
+  background: #3498db;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: 0.3s;
+}
+
+.print-btn:hover {
+  background: #2980b9;
+}
+
+/* TOPBAR */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.topbar input {
+  padding: 10px;
+  border-radius: 20px;
+  border: none;
+  background: #ddd;
+}
+
+.user {
+  background: #ccc;
+  padding: 10px 15px;
+  border-radius: 20px;
+}
+
+/* FILTER */
+.filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  background: #3498db;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* CARDS */
+.cards {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.card {
+  flex: 1;
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* CHART */
+.chart-box {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.chart-placeholder {
+  height: 200px;
+  background: #eee;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* INSIGHTS */
+.insights {
+  display: flex;
+  gap: 20px;
+}
+
+.box {
+  flex: 1;
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+/* RIGHT SECTION */
+.right-section {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.datetime {
+  background: #222;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 13px;
+  letter-spacing: 1px;
+}
+
+/* PRINT MODE */
+@media print {
+  body {
+    background: white;
+  }
+
+  .sidebar,
+  .topbar,
+  .print-btn,
+  .logout-section,
+  .filters {
+    display: none;
+  }
+
+  .main {
+    margin: 0;
+    padding: 0;
+  }
+
+  .card,
+  .chart-box,
+  .box {
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+
+  canvas {
+    max-width: 100%;
+  }
+}
+
+/* TABLET */
+@media (max-width: 992px) {
+  .sidebar {
+    width: 210px;
+  }
+
+  .main {
+    margin-left: 210px;
+  }
+
+  .system-name {
+    font-size: 13px;
+  }
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .sidebar {
+    position: relative;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .sidebar ul {
+    overflow: visible;
+    max-height: none;
+  }
+
+  .logout-section {
+    border-top: none;
+    padding-top: 8px;
+    margin-top: 10px;
+  }
+
+  .main {
+    margin-left: 0;
+    padding: 15px;
+  }
+
+  .topbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .topbar input {
+    width: 100%;
+  }
+
+  .cards {
+    flex-direction: column;
+  }
+
+  .insights {
+    flex-direction: column;
+  }
+
+  .right-section {
+    justify-content: space-between;
+  }
+}
+
+/* Detailed admin report */
+.main { box-sizing: border-box; color: #182230; }
+.page-header { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-bottom: 24px; flex-wrap: wrap; }
+.page-header h1 { font-size: 25px; margin: 0 0 7px; }
+.subtitle { color: #667085; margin: 0; font-size: 14px; }
+.page-header .print-btn { margin: 0; font-weight: 600; }
+.report-filters { align-items: end; flex-wrap: wrap; padding: 20px; background: white; border: 1px solid #e4e7ec; border-radius: 12px; gap: 16px; }
+.report-filters label { display: block; color: #344054; font-size: 13px; font-weight: 600; margin-bottom: 7px; }
+.report-filters select { min-width: 190px; background: white; border: 1px solid #d0d5dd; color: #182230; border-radius: 8px; padding: 10px 12px; font: inherit; font-size: 14px; }
+.report-filters .filter-btn { padding: 11px 18px; font-weight: 600; }
+.report-filters .report-note { flex: 1 1 220px; margin: 0; }
+button:focus-visible, select:focus-visible, .table-scroll:focus-visible { outline: 3px solid #b3d8f5; outline-offset: 2px; }
+.report-context { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin: 24px 0 16px; }
+.report-context strong { display: block; font-size: 18px; margin-bottom: 6px; }
+.report-context span, .report-context p { font-size: 12px; color: #667085; }
+.report-metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-bottom: 20px; }
+.report-metrics .card { box-shadow: none; border: 1px solid #e4e7ec; padding: 18px; min-width: 0; }
+.report-metrics h2 { font-size: 12px; color: #475467; font-weight: 600; margin: 0 0 12px; }
+.report-metrics strong { font-size: 24px; overflow-wrap: anywhere; }
+.report-metrics small { font-size: 17px; color: #667085; }
+.report-metrics p { font-size: 12px; color: #667085; line-height: 1.5; margin: 10px 0 0; }
+.report-metrics .metric-sales { background: #edf7ff; border-color: #b3d8f5; }
+.metric-sales strong { color: #175c91; }
+.report-section { background: white; padding: 22px; border: 1px solid #e4e7ec; border-radius: 12px; margin-bottom: 20px; min-width: 0; }
+.report-section h2 { font-size: 17px; margin: 0 0 8px; }
+.report-section h3 { font-size: 14px; margin: 0 0 8px; }
+.report-note { font-size: 12px; color: #667085; line-height: 1.7; margin: 8px 0 12px; }
+.comparison-section { display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; }
+.comparison-value { font-size: 24px; font-weight: 700; margin: 12px 0; }
+.comparison-value span { font-size: 13px; font-weight: 400; }
+.increase { color: #18734b; }
+.decrease { color: #b42318; }
+.best-day { border-left: 3px solid #b3d8f5; padding-left: 16px; }
+.best-day strong { font-size: 15px; }
+.report-columns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.report-chart { position: relative; height: 270px; margin: 18px 0 8px; }
+.forecast-section { border-color: #ddd6fe; }
+.forecast-totals { display: flex; flex-wrap: wrap; gap: 20px; margin: 18px 0; }
+.forecast-totals span { display: block; font-size: 12px; color: #667085; margin-bottom: 6px; }
+.forecast-totals strong { font-size: 23px; color: #6d28d9; overflow-wrap: anywhere; }
+.table-scroll { overflow: auto; max-height: 380px; margin: 14px 0; border: 1px solid #eaecf0; border-radius: 8px; }
+.table-scroll table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 12px; }
+.table-scroll th, .table-scroll td { padding: 12px 10px; text-align: left; border-bottom: 1px solid #eaecf0; vertical-align: top; }
+.table-scroll thead th { background: #f8fafc; color: #475467; position: sticky; top: 0; z-index: 1; font-weight: 600; white-space: nowrap; }
+.table-scroll tbody th { font-weight: 500; min-width: 85px; }
+.table-scroll tbody tr:nth-child(even) { background: #fafbfc; }
+.table-scroll .numeric { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.table-scroll tfoot { background: #eef4fa; font-weight: 700; }
+.report-empty { background: #f8fafc; color: #667085; padding: 18px; font-size: 13px; line-height: 1.7; border-radius: 8px; }
+.report-footnote { margin: 0 0 24px; }
+@media (max-width: 1200px) {
+    .report-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .report-columns { grid-template-columns: minmax(0, 1fr); gap: 0; }
+}
+@media (max-width: 768px) {
+    .report-section { padding: 16px; }
+    .report-filters > div { flex: 1 1 100%; }
+    .report-filters select { min-width: 0; width: 100%; }
+    .report-metrics { gap: 10px; }
+    .report-metrics .card { padding: 12px; }
+    .report-metrics strong { font-size: 20px; }
+    .page-header h1 { font-size: 23px; }
+}
+@media print {
+    @page { size: A4; margin: 12mm; }
+    body > :not(.print-summary) { display: none !important; }
+    .print-summary { display: block; color: #243747; font: 10pt/1.4 Arial, sans-serif; }
+    .summary-heading { display: flex; justify-content: space-between; gap: 24px; border-top: 7px solid #267b83; border-bottom: 1px solid #bfcdd2; padding: 16px 0; }
+    .summary-heading h1 { font-size: 27pt; margin: 4px 0 8px; }
+    .summary-eyebrow { font-size: 9pt; text-transform: uppercase; letter-spacing: 1px; }
+    .summary-prepared { text-align: right; max-width: 38%; font-size: 9pt; overflow-wrap: anywhere; }
+    .print-summary section { margin-top: 18px; break-inside: avoid; }
+    .print-summary h2 { font-size: 12pt; margin: 0 0 8px; color: #21666c; }
+    .print-summary p { margin: 6px 0; }
+    .summary-highlights { display: flex; border: 1px solid #bfcdd2; }
+    .summary-highlights > div { flex: 1; padding: 12px; }
+    .summary-highlights span { display: block; font-size: 9pt; }
+    .summary-highlights strong { display: block; font-size: 18pt; margin-top: 4px; }
+    .print-summary table { width: 100%; border-collapse: collapse; font-size: 9pt; }
+    .print-summary th, .print-summary td { border-bottom: 1px solid #cdd7dd; padding: 7px 9px; text-align: left; overflow-wrap: anywhere; }
+    .print-summary tbody th { font-weight: normal; }
+    .print-summary thead { background: #eaf1f3; border-top: 1px solid #9db5be; }
+    .print-summary .summary-note, .print-summary footer { font-size: 8pt; color: #53656b; }
+    .summary-outlook { border-left: 3px solid #267b83; padding-left: 12px; }
+    .print-summary footer { margin-top: 20px; border-top: 1px solid #bfcdd2; padding-top: 10px; }
+    .sidebar, .filters, .print-btn { display: none !important; }
+    .main { margin: 0; padding: 0; }
+    .report-context { margin-top: 0; }
+    .report-columns { display: block; }
+    .report-metrics { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .report-metrics strong { font-size: 16px; }
+    .report-metrics .card { padding: 10px; }
+    .report-section { padding: 12px; border-radius: 0; }
+    .table-scroll { overflow: visible; max-height: none; border: 0; }
+    .table-scroll table { width: 100%; font-size: 9px; }
+    .table-scroll th, .table-scroll td { padding: 7px 4px; }
+    .table-scroll thead th { position: static; white-space: normal; }
+    .table-scroll tbody th { min-width: 0; }
+    .table-scroll thead { display: table-header-group; }
+    .table-scroll tfoot { display: table-row-group; }
+    tr, .card, .report-chart { break-inside: avoid; }
+    h2, h3 { break-after: avoid; }
+    .report-chart { height: 260px; }
+    .report-chart canvas { width: 100% !important; height: 260px !important; }
+    .report-note { font-size: 10px; }
+}

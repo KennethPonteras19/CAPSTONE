@@ -1,0 +1,379 @@
+/* =====================================
+   ORDER MODAL
+===================================== */
+
+.order-modal-overlay {
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.55);
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    z-index: 9999;
+
+    padding: 20px;
+}
+
+
+.order-modal-overlay.show {
+    display: flex;
+}
+
+
+.order-modal {
+    position: relative;
+
+    width: 520px;
+    max-width: 100%;
+
+    background: #ffffff;
+
+    border-radius: 20px;
+
+    padding: 32px;
+
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+
+/* CLOSE BUTTON */
+
+.modal-close {
+    position: absolute;
+
+    top: 15px;
+    right: 18px;
+
+    width: 36px;
+    height: 36px;
+
+    border: none;
+
+    background: transparent;
+
+    font-size: 32px;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+    color: #222;
+}
+
+
+.modal-close:hover {
+    opacity: 0.6;
+}
+
+
+/* PRODUCT */
+
+.modal-product {
+    display: flex;
+
+    align-items: center;
+
+    gap: 25px;
+
+    padding-right: 30px;
+
+    margin-bottom: 28px;
+}
+
+
+.modal-product-image {
+    width: 145px;
+    height: 145px;
+
+    flex-shrink: 0;
+
+    background: #eee8f2;
+
+    border-radius: 20px;
+
+    position: relative;
+
+    overflow: hidden;
+}
+
+
+/* MODAL PRODUCT SHAPES */
+
+.modal-product-image .product-triangle {
+    position: absolute;
+
+    width: 0;
+    height: 0;
+
+    border-left: 22px solid transparent;
+    border-right: 22px solid transparent;
+    border-bottom: 38px solid #c5c1c9;
+
+    top: 28px;
+    left: 52px;
+}
+
+
+.modal-product-image .product-gear {
+    position: absolute;
+
+    font-size: 43px;
+
+    color: #c5c1c9;
+
+    left: 28px;
+    bottom: 23px;
+}
+
+
+.modal-product-image .product-square {
+    position: absolute;
+
+    width: 38px;
+    height: 38px;
+
+    background: #c5c1c9;
+
+    border-radius: 8px;
+
+    right: 25px;
+    bottom: 24px;
+}
+
+
+/* PRODUCT DETAILS */
+
+.modal-product-info {
+    flex: 1;
+}
+
+
+.modal-product-info h2 {
+    margin: 0 0 10px;
+
+    font-size: 23px;
+
+    color: #222;
+}
+
+
+.modal-product-info p {
+    margin: 0;
+
+    font-size: 22px;
+
+    font-weight: 700;
+
+    color: #222;
+}
+
+
+/* QUANTITY */
+
+.quantity-section {
+    border-top: 1px solid #ddd;
+
+    padding-top: 18px;
+
+    padding-bottom: 18px;
+}
+
+
+.quantity-section h3 {
+    margin: 0 0 18px;
+
+    font-size: 17px;
+}
+
+
+.quantity-controls {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 80px;
+}
+
+
+.quantity-button {
+    width: 42px;
+    height: 42px;
+
+    border: 3px solid #222;
+
+    border-radius: 6px;
+
+    background: #ffffff;
+
+    font-size: 28px;
+
+    line-height: 30px;
+
+    cursor: pointer;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+
+.quantity-button:hover {
+    background: #f1edf5;
+}
+
+
+#quantity {
+    min-width: 30px;
+
+    text-align: center;
+
+    font-size: 18px;
+
+    font-weight: 600;
+}
+
+
+/* SUBTOTAL */
+
+.subtotal-section {
+    border-top: 1px solid #ddd;
+
+    padding-top: 20px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    font-size: 17px;
+}
+
+
+.subtotal-section strong {
+    font-size: 18px;
+}
+
+
+/* ACTION BUTTONS */
+
+.modal-actions {
+    display: flex;
+
+    gap: 12px;
+
+    margin-top: 22px;
+}
+
+
+.cancel-button,
+.cart-button {
+    height: 46px;
+
+    border-radius: 7px;
+
+    font-size: 14px;
+
+    cursor: pointer;
+}
+
+
+.cancel-button {
+    width: 90px;
+
+    border: 1px solid #222;
+
+    background: #ffffff;
+
+    color: #222;
+}
+
+
+.cancel-button:hover {
+    background: #f3f3f3;
+}
+
+
+.cart-button {
+    flex: 1;
+
+    border: 1px solid #0048d8;
+
+    background: #075bea;
+
+    color: #ffffff;
+}
+
+
+.cart-button:hover {
+    background: #004bd1;
+}
+
+
+/* =====================================
+   MOBILE MODAL
+===================================== */
+
+@media (max-width: 600px) {
+
+    .order-modal {
+        width: 100%;
+
+        padding: 25px;
+
+        border-radius: 18px;
+    }
+
+
+    .modal-product {
+        gap: 18px;
+    }
+
+
+    .modal-product-image {
+        width: 125px;
+        height: 125px;
+    }
+
+
+    .quantity-controls {
+        gap: 55px;
+    }
+
+}
+
+
+@media (max-width: 450px) {
+
+    .modal-product-image {
+        width: 110px;
+        height: 110px;
+    }
+
+
+    .modal-product-info h2 {
+        font-size: 19px;
+    }
+
+
+    .modal-product-info p {
+        font-size: 19px;
+    }
+
+
+    .quantity-controls {
+        gap: 40px;
+    }
+
+}
+

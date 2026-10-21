@@ -1,0 +1,156 @@
+/* GLOBAL */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f6f9;
+}
+
+/* LAYOUT */
+.login-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* LEFT SIDE */
+.login-left {
+  width: 40%;
+  background: linear-gradient(135deg, #2c2c2c, #1a1a1a);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+}
+
+.logo {
+  width: 80px;
+}
+
+.login-left h1 {
+  margin: 0;
+}
+
+.login-left p {
+  font-size: 13px;
+  color: #ccc;
+}
+
+/* ROLE BUTTONS */
+.roles {
+  margin-top: 20px;
+}
+
+.role-btn {
+  text-decoration: none;
+  color: white;
+  padding: 8px 15px;
+  border: 1px solid #555;
+  border-radius: 20px;
+  margin: 5px;
+  font-size: 12px;
+  transition: 0.3s;
+}
+
+.role-btn:hover {
+  background: #444;
+}
+
+.role-btn.active {
+  background: #3498db;
+  border: none;
+}
+
+/* RIGHT SIDE */
+.login-right {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 80px;
+  background: white;
+}
+
+.login-right h2 {
+  margin-bottom: 5px;
+}
+
+.subtitle {
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 20px;
+}
+
+/* INPUT */
+.input-group {
+  margin-bottom: 15px;
+}
+
+.input-box {
+  display: flex;
+  align-items: center;
+  background: #f1f1f1;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.input-box i {
+  margin-right: 10px;
+  color: #666;
+}
+
+.input-box input {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+}
+
+/* OPTIONS */
+.options {
+  font-size: 12px;
+  margin-bottom: 15px;
+}
+
+/* ERROR */
+.error {
+  color: red;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+/* BUTTON */
+.login-btn {
+  width: 100%;
+  padding: 12px;
+  background: #2c2c2c;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.login-btn:hover {
+  background: #444;
+}
+
+.captcha-group > label { display: block; margin-bottom: 8px; }
+.captcha-group[hidden], .captcha-group [hidden] { display: none !important; }
+.captcha-image-row { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 10px; }
+.captcha-image-row img { max-width: 100%; height: auto; border: 1px solid #d7dde5; border-radius: 8px; }
+.captcha-refresh { padding: 9px 12px; background: #eef2f6; border: 1px solid #cdd5df; border-radius: 8px; cursor: pointer; color: #27384c; }
+.captcha-refresh:disabled { opacity: .6; cursor: wait; }
+.captcha-refresh:focus-visible, .login-btn:focus-visible { outline: 2px solid #3498db; outline-offset: 3px; }
+.captcha-help, .captcha-status { font-size: 12px; line-height: 1.5; color: #526174; margin: 6px 0 0; }
+.captcha-status:empty { display: none; }
+.captcha-group input { letter-spacing: 2px; }
+.login-right { box-sizing: border-box; }
+@media (max-width: 720px) {
+  .login-container { flex-direction: column; }
+  .login-left, .login-right { width: 100%; box-sizing: border-box; padding: 24px; }
+  .login-left { gap: 6px; }
+  .login-left .logo { width: 48px; }
+  .login-left h1 { font-size: 22px; margin: 8px 0; }
+  .roles { display: flex; flex-wrap: wrap; justify-content: center; margin-top: 8px; }
+}

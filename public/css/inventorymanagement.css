@@ -1,0 +1,514 @@
+/* ==================================================
+   INVENTORY MANAGEMENT
+================================================== */
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f6f9;
+}
+
+
+/* ==================================================
+   SIDEBAR
+================================================== */
+
+.sidebar {
+    width: 240px;
+    height: 100vh;
+    background: #1f1f1f;
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 14px 14px 16px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+
+/* LOGO */
+
+.logo-section {
+    text-align: center;
+    padding: 4px 4px 10px;
+    border-bottom: 1px solid #444;
+    margin-bottom: 10px;
+}
+
+.logo-section a {
+    text-decoration: none;
+    color: white;
+}
+
+.logo {
+    width: 62px;
+    margin-bottom: 4px;
+}
+
+.system-name {
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin: 0;
+}
+
+
+/* MENU */
+
+.sidebar ul {
+    padding: 0;
+    margin: 12px 0 0;
+    list-style: none;
+    flex: 1;
+}
+
+.sidebar li {
+    margin-bottom: 10px;
+}
+
+.sidebar a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: white;
+    padding: 10px 12px;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.sidebar a:hover {
+    background: #444;
+}
+
+.sidebar .active a {
+    background: #444;
+}
+
+.sidebar i {
+    margin-right: 10px;
+}
+
+
+/* LOGOUT */
+
+.logout-section {
+    margin-top: auto;
+    padding-top: 10px;
+    border-top: 1px solid #333;
+}
+
+.logout-btn {
+    width: 100%;
+    background: #ff4d4d;
+    border: none;
+    padding: 10px;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+
+/* ==================================================
+   MAIN
+================================================== */
+
+.main {
+    margin-left: 240px;
+    padding: 20px;
+}
+
+
+/* ==================================================
+   TOPBAR
+================================================== */
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.topbar input {
+    width: 300px;
+    padding: 12px 15px;
+    border-radius: 20px;
+    border: none;
+    background: #ddd;
+    outline: none;
+}
+
+.right-section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.datetime {
+    background: #222;
+    color: #fff;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    letter-spacing: 1px;
+}
+
+.user {
+    background: #ccc;
+    padding: 10px 15px;
+    border-radius: 20px;
+}
+
+
+/* ==================================================
+   SUCCESS / ERROR
+================================================== */
+
+.success-message {
+    background: #d4edda;
+    color: #155724;
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.error-message {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.error-message ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+
+/* ==================================================
+   BUTTON
+================================================== */
+
+.add-btn {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 11px 16px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.add-btn:hover {
+    background: #2980b9;
+}
+
+
+/* ==================================================
+   TABLE
+================================================== */
+
+.table-container {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    background: #eee;
+    padding: 12px;
+    text-align: left;
+}
+
+td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+
+/* ==================================================
+   STOCK STATUS
+================================================== */
+
+.low {
+    color: red;
+    font-weight: bold;
+}
+
+.ok {
+    color: green;
+    font-weight: bold;
+}
+
+.stock-number {
+    font-weight: bold;
+}
+
+
+/* ==================================================
+   RECEIVE BUTTON
+================================================== */
+
+.receive-small-btn {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 7px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.receive-small-btn:hover {
+    background: #2980b9;
+}
+
+
+/* ==================================================
+   STOCK-IN HISTORY
+================================================== */
+
+.history-section {
+    margin-top: 35px;
+}
+
+.history-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.history-header h2 {
+    margin-bottom: 15px;
+}
+
+.stock-in-quantity {
+    color: green;
+    font-weight: bold;
+}
+
+.no-data {
+    text-align: center;
+    color: #777;
+    padding: 25px;
+}
+
+
+/* ==================================================
+   MODAL
+================================================== */
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background: rgba(0, 0, 0, 0.55);
+
+    justify-content: center;
+    align-items: center;
+
+    z-index: 2000;
+}
+
+
+/* MODAL CONTENT */
+
+.modal-content {
+    background: white;
+
+    width: 430px;
+    max-width: 90%;
+
+    padding: 25px;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,0.2);
+}
+
+
+/* MODAL HEADER */
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 20px;
+}
+
+.modal-header h3 {
+    margin: 0;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+
+    font-size: 28px;
+    cursor: pointer;
+
+    color: #777;
+}
+
+
+/* LABEL */
+
+.modal-content label {
+    display: block;
+
+    margin-top: 12px;
+    margin-bottom: 6px;
+
+    font-weight: bold;
+}
+
+
+/* INPUT */
+
+.modal-content input {
+    width: 100%;
+
+    padding: 10px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #ccc;
+
+    border-radius: 7px;
+
+    outline: none;
+}
+
+.modal-content input:focus {
+    border-color: #3498db;
+}
+
+
+/* STOCK PREVIEW */
+
+.stock-preview {
+    margin-top: 15px;
+
+    background: #eef6ff;
+
+    border-radius: 8px;
+
+    padding: 12px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+}
+
+.stock-preview strong {
+    font-size: 20px;
+}
+
+
+/* ==================================================
+   MODAL ACTIONS
+================================================== */
+
+.modal-actions {
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    margin-top: 25px;
+}
+
+.cancel-btn {
+    background: #ddd;
+
+    border: none;
+
+    padding: 10px 16px;
+
+    border-radius: 7px;
+
+    cursor: pointer;
+}
+
+.save-btn {
+    background: #27ae60;
+
+    color: white;
+
+    border: none;
+
+    padding: 10px 16px;
+
+    border-radius: 7px;
+
+    cursor: pointer;
+}
+
+.save-btn:hover {
+    background: #219150;
+}
+
+
+/* ==================================================
+   RESPONSIVE
+================================================== */
+
+@media (max-width: 992px) {
+
+    .sidebar {
+        width: 210px;
+    }
+
+    .main {
+        margin-left: 210px;
+    }
+
+}
+
+
+@media (max-width: 768px) {
+
+    .sidebar {
+        width: 180px;
+    }
+
+    .main {
+        margin-left: 180px;
+    }
+
+    .topbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+    }
+
+    .topbar input {
+        width: 100%;
+    }
+
+    .right-section {
+        justify-content: flex-end;
+    }
+
+}

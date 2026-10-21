@@ -1,0 +1,528 @@
+
+/* =========================================
+   TMTA CONSTRUCTION SUPPLY
+   MORE PAGE
+========================================= */
+
+.more-main {
+    padding: 14px 22px 20px;
+    color: #172b45;
+    background: #f4f7fb;
+    min-height: calc(100vh - 55px);
+    box-sizing: border-box;
+}
+
+.more-main *,
+.more-main *::before,
+.more-main *::after {
+    box-sizing: border-box;
+}
+
+.more-main a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* WELCOME BANNER */
+
+.more-hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 165px;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid #e1e8f0;
+    border-radius: 12px;
+    margin-bottom: 14px;
+}
+
+.hero-text {
+    padding: 20px 25px;
+    align-self: center;
+}
+
+.hero-label {
+    display: block;
+    margin-bottom: 5px;
+    color: #ff4054;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.4px;
+}
+
+.hero-text h1 {
+    margin: 0 0 10px;
+    color: #172b45;
+    font-size: clamp(21px, 1.7vw, 29px);
+    line-height: 1.15;
+    font-weight: 800;
+}
+
+.hero-text p {
+    max-width: 480px;
+    margin: 0;
+    color: #5c6e86;
+    font-size: 13px;
+    line-height: 1.65;
+}
+
+.hero-image {
+    min-height: 165px;
+    background:
+        linear-gradient(90deg, rgba(255,255,255,.15), transparent 30%),
+        url("/images/hardware-store.jpg") center / cover no-repeat;
+}
+
+/* QUICK LINKS */
+
+.more-cards {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 14px;
+}
+
+.more-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 0;
+    min-height: 185px;
+    padding: 17px 20px;
+    background: #fff;
+    border: 1px solid #e1e8f0;
+    border-radius: 11px;
+    transition: transform .2s, box-shadow .2s;
+}
+
+.more-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 7px 20px rgba(23,43,69,.08);
+}
+
+.card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    margin-bottom: 11px;
+    border-radius: 50%;
+    background: #ff4054;
+    color: #fff;
+    font-size: 23px;
+    font-weight: 700;
+}
+
+.more-card h3 {
+    margin: 0 0 7px;
+    color: #172b45;
+    font-size: 16px;
+}
+
+.more-card p {
+    margin: 0;
+    color: #61728a;
+    font-size: 13px;
+    line-height: 1.55;
+}
+
+.card-arrow {
+    margin-top: auto;
+    padding-top: 9px;
+    color: #ff4054;
+    font-size: 23px;
+}
+
+/* INFORMATION LAYOUT */
+
+.more-info-grid {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1.15fr)
+        minmax(0, .85fr)
+        minmax(0, 1.4fr);
+    align-items: stretch;
+    gap: 14px;
+    margin-bottom: 14px;
+}
+
+.info-panel {
+    min-width: 0;
+    padding: 17px;
+    background: #fff;
+    border: 1px solid #e1e8f0;
+    border-radius: 11px;
+}
+
+.info-panel h2 {
+    margin: 0 0 16px;
+    color: #172b45;
+    font-size: 17px;
+    font-weight: 750;
+}
+
+/* CONTACT INFORMATION */
+
+.contact-panel {
+    display: flex;
+    flex-direction: column;
+}
+
+.contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 13px;
+}
+
+.contact-icon {
+    flex-shrink: 0;
+    width: 27px;
+    color: #ff4054;
+    font-size: 22px;
+    text-align: center;
+}
+
+.contact-item strong {
+    display: block;
+    color: #172b45;
+    font-size: 13px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.contact-item p {
+    margin: 2px 0 0;
+    color: #667991;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+/* COMPACT STORE HOURS */
+
+.hours-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 17px;
+}
+
+.hours-heading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 13px;
+    border-bottom: 1px solid #e7edf4;
+}
+
+.hours-heading h2 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.hours-icon {
+    color: #ff4054;
+    font-size: 25px;
+    line-height: 1;
+}
+
+.hours-details {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    padding: 15px 0 10px;
+}
+
+.calendar-icon {
+    color: #172b45;
+    font-size: 22px;
+}
+
+.hours-details strong {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 12px;
+}
+
+.hours-details p {
+    margin: 0;
+    color: #52647c;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.hours-status {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 4px;
+    color: #718197;
+    font-size: 11px;
+}
+
+.status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #29a36a;
+}
+
+/* STORE LOCATION */
+
+.location-panel {
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+}
+
+.map-placeholder {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 175px;
+    padding: 20px;
+    border-radius: 7px;
+    background: linear-gradient(135deg, #e5edf5, #f6f9fc);
+    text-align: center;
+}
+
+.map-pin {
+    margin-bottom: 7px;
+    color: #ff4054;
+    font-size: 38px;
+}
+
+.map-placeholder strong {
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.map-placeholder p {
+    margin: 7px 0 0;
+    color: #718197;
+    font-size: 12px;
+}
+
+.map-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 13px 4px 3px;
+    color: #ff4054 !important;
+    font-size: 12px;
+    font-weight: 650;
+}
+
+/* ABOUT TMTA */
+
+.about-panel {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 14px;
+}
+
+.about-icon,
+.services-heading-icon {
+    color: #ff4054;
+    font-size: 25px;
+}
+
+.about-panel h2 {
+    margin-bottom: 7px;
+}
+
+.about-panel p {
+    margin: 0;
+    color: #61728a;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+/* CUSTOMER SERVICES */
+
+.services-panel {
+    margin-bottom: 14px;
+}
+
+.services-panel h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.service-link {
+    display: grid;
+    grid-template-columns: 27px minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    align-content: start;
+    gap: 4px 10px;
+    min-width: 0;
+    padding: 10px 12px;
+    border-right: 1px solid #e1e8f0;
+}
+
+.service-link:first-child {
+    padding-left: 5px;
+}
+
+.service-link:last-child {
+    border-right: none;
+}
+
+.service-link:hover {
+    background: #f8fafd;
+}
+
+.service-icon {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    color: #172b45;
+    font-size: 22px;
+}
+
+.service-link strong {
+    display: block;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.service-link small {
+    display: block;
+    margin-top: 3px;
+    color: #718197;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.service-arrow {
+    grid-column: 2;
+    margin-top: 5px;
+    color: #ff4054;
+    font-size: 17px;
+}
+
+/* FAQ */
+
+.faq-panel {
+    margin-bottom: 14px;
+}
+
+.faq-panel details {
+    padding: 13px 0;
+    border-top: 1px solid #e7edf4;
+}
+
+.faq-panel summary {
+    color: #172b45;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 650;
+}
+
+.faq-panel details p {
+    margin: 10px 0 0;
+    color: #61728a;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* FOOTER */
+
+.more-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 14px 3px 0;
+    color: #718197;
+    font-size: 10px;
+}
+
+/* TABLETS */
+
+@media (max-width: 1100px) {
+    .more-cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .more-info-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .location-panel {
+        grid-column: 1 / -1;
+    }
+
+    .services-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .service-link {
+        border-right: none;
+        border-bottom: 1px solid #e1e8f0;
+    }
+
+    .service-link:last-child {
+        border-bottom: none;
+    }
+}
+
+/* MOBILE */
+
+@media (max-width: 650px) {
+    .more-main {
+        padding: 12px;
+    }
+
+    .more-hero {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-text {
+        padding: 20px;
+    }
+
+    .hero-image {
+        min-height: 145px;
+    }
+
+    .more-cards,
+    .more-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .more-card {
+        min-height: 155px;
+    }
+
+    .location-panel {
+        grid-column: auto;
+    }
+
+    .services-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .service-link,
+    .service-link:first-child {
+        padding: 12px 5px;
+    }
+
+    .more-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        line-height: 1.6;
+    }
+}

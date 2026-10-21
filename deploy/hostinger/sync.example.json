@@ -1,0 +1,9 @@
+{
+  "host": "YOUR_HOSTINGER_SSH_HOST",
+  "port": 65002,
+  "username": "YOUR_HOSTINGER_USERNAME",
+  "privateKey": "C:/Users/YOUR_USER/.ssh/YOUR_PRIVATE_KEY",
+  "remoteDirectory": "/home/YOUR_HOSTINGER_USERNAME/tmta-sync",
+  "pollSeconds": 3,
+  "debounceSeconds": 2
+}

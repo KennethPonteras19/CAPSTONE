@@ -1,0 +1,91 @@
+* { box-sizing: border-box; }
+.tmta-login { margin: 0; min-height: 100vh; min-height: 100svh; padding: 48px 24px; display: grid; place-items: center; background: radial-gradient(ellipse at 53% 10%, #142249 0, #080f24 64%); color: #15264d; font-family: Arial, sans-serif; }
+[hidden] { display: none !important; }
+button, input { font: inherit; }
+a { color: #2454a0; }
+button, a, summary, input { -webkit-tap-highlight-color: transparent; }
+:focus-visible { outline: 3px solid #2868da; outline-offset: 4px; }
+.login-card { position: relative; isolation: isolate; display: flex; width: min(1070px, 100%); min-height: 604px; border: 1px solid #ffffff38; border-radius: 30px; overflow: hidden; background: #faf7ed; box-shadow: 0 28px 60px #0005; }
+.login-form-panel { position: relative; z-index: 2; width: 51%; padding: 70px 70px 60px; }
+.login-form-panel h1 { font-size: 32px; font-weight: 700; letter-spacing: 1.2px; margin: 0 0 13px; }
+.heading-accent { width: 40px; height: 4px; border-radius: 3px; background: linear-gradient(90deg, #f55835, #f5d356 55%, #2658a1); }
+.role-caption { margin: 16px 0 -28px; font-size: 13px; color: #58627a; }
+.login-form { margin-top: 42px; }
+.input-group { margin-bottom: 24px; }
+.input-box { display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #cbc6ba; min-height: 47px; }
+.input-box:focus-within { border-color: #2566d9; box-shadow: 0 1px #2566d9; }
+.input-box input { width: 100%; min-width: 0; padding: 12px 0; border: 0; border-radius: 0; outline: none; background: transparent; color: #16274d; font-size: 16px; line-height: 22px; }
+.input-box input::placeholder { color: #7d8093; opacity: 1; }
+.user-icon { flex: 0 0 20px; width: 20px; height: 20px; color: #7d8093; }
+.password-control > .password-toggle { right: 0; color: #7d8093; }
+.password-control > .password-toggle:hover { background: #e9e4d9; }
+.password-toggle svg { width: 18px; height: 18px; }
+.login-options { display: flex; align-items: start; justify-content: space-between; flex-wrap: wrap; gap: 14px; margin: 28px 0 32px; font-size: 14px; color: #4b5672; }
+.remember { display: flex; align-items: center; gap: 9px; cursor: pointer; line-height: 20px; }
+.remember input { width: 16px; height: 16px; margin: 1px 0 0; accent-color: #215bbb; }
+.password-help { position: relative; }
+.password-help summary { color: #2454a0; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; list-style: none; line-height: 20px; }
+.password-help summary::-webkit-details-marker { display: none; }
+.password-help p { position: absolute; z-index: 4; top: 22px; right: 0; margin: 8px 0 0; width: 235px; padding: 14px; border: 1px solid #ded8c9; border-radius: 10px; background: #fffdf7; box-shadow: 0 8px 25px #14244926; line-height: 1.5; }
+.login-btn { width: 100%; min-height: 54px; padding: 15px 20px; border: 0; border-radius: 28px; background: linear-gradient(100deg, #1e50b0, #286cec); color: #fff; font-family: Georgia, serif; font-size: 17px; font-weight: bold; box-shadow: 0 12px 25px #2359b84a; cursor: pointer; transition: transform .2s, box-shadow .2s; }
+.login-btn:hover { transform: translateY(-2px); box-shadow: 0 16px 28px #2359b85c; }
+.login-btn:disabled { opacity: .65; cursor: wait; transform: none; }
+.error { color: #a52c2c; background: #ffe9e1; border-radius: 8px; padding: 12px; font-size: 13px; line-height: 1.5; margin: 0 0 16px; }
+.roles { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 30px; font-size: 12px; }
+.roles a { text-decoration: none; padding: 4px 0; }
+.roles [aria-current] { font-weight: bold; border-bottom: 2px solid #2868da; }
+.master-link { display: inline-block; margin-top: 20px; font-size: 13px; }
+.login-brand { position: absolute; z-index: 1; inset: 0 0 0 48%; overflow: hidden; clip-path: polygon(24% 0, 100% 0, 100% 100%, 0 100%); background: #324574; }
+.brand-art { position: absolute; inset: -25px; background: radial-gradient(ellipse at 48% 15%, #ff715f 0, #ff715fe6 15%, transparent 44%), radial-gradient(ellipse at 50% 85%, #276de2 0, #235abb 32%, transparent 60%), radial-gradient(ellipse at 100% 72%, #cebe6f 0, transparent 40%), #34416c; }
+.brand-art img { position: absolute; width: 100%; max-width: none; top: 14%; left: 5%; opacity: .7; filter: blur(16px) saturate(1.5); transform: scale(1.04); }
+.brand-copy { position: absolute; left: 32%; right: 10%; bottom: 15%; color: #fffaf0; }
+.brand-eyebrow { font-size: 13px; font-weight: 700; letter-spacing: 4px; margin: 0 0 18px; }
+.brand-copy h2 { font: bold 42px/1.2 Georgia, serif; margin: 0 0 20px; }
+.brand-copy h2 em { display: inline-block; color: #f9df78; font-weight: normal; font-size: 48px; }
+.brand-description { color: #e0e7f8; font-size: 16px; line-height: 1.65; letter-spacing: .2px; margin: 0; }
+.captcha-group > label { display: block; font-size: 13px; margin-bottom: 12px; }
+.captcha-image-row { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 8px; }
+.captcha-image-row img { max-width: 100%; height: auto; border: 1px solid #d9d3c5; border-radius: 8px; }
+.captcha-refresh { padding: 9px 12px; background: #eee9dc; border: 1px solid #d7cfbd; border-radius: 8px; cursor: pointer; color: #263959; font-size: 12px; }
+.captcha-refresh:disabled { opacity: .6; cursor: wait; }
+.captcha-help, .captcha-status { font-size: 12px; line-height: 1.5; color: #526174; margin: 8px 0 0; }
+.captcha-status:empty { display: none; }
+.captcha-group input { letter-spacing: 2px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+.login-intro { position: fixed; inset: 0; z-index: 10; display: grid; place-items: center; background: #fff; opacity: 1; transition: opacity 1s ease-in-out; }
+.login-intro-media { position: relative; isolation: isolate; width: min(860px, 88vw, calc(80svh * 16 / 9)); aspect-ratio: 16 / 9; overflow: hidden; background: #fff; }
+/* Cover the outer video pixels, including thin decoder/compositor edge seams. */
+.login-intro-media::after { content: ""; position: absolute; inset: 0; z-index: 1; border: 4px solid #fff; pointer-events: none; }
+.login-intro video { display: block; width: 100%; height: 100%; object-fit: contain; background: #fff; border: 0; outline: 0; box-shadow: none; clip-path: inset(3px); opacity: 0; }
+.login-intro video.is-ready { opacity: 1; }
+.login-intro.is-exiting { opacity: 0; pointer-events: none; }
+.skip-intro { position: absolute; right: 28px; bottom: 28px; border: 1px solid #c5cbd5; padding: 12px 18px; border-radius: 24px; background: #ffffffed; color: #183567; cursor: pointer; box-shadow: 0 4px 16px #0001; }
+.skip-intro span { margin-left: 12px; }
+.intro-running { overflow: hidden; }
+.intro-running .login-card { opacity: 0; transform: translateY(10px) scale(.985); }
+.intro-running.intro-finishing .login-card { opacity: 1; transform: none; transition: opacity 1s ease-in-out, transform 1s cubic-bezier(.2, .65, .3, 1); }
+@media (max-width: 1000px) {
+    .login-form-panel { padding: 58px 40px; }
+    .brand-copy { left: 28%; right: 8%; }
+    .brand-eyebrow { letter-spacing: 2.5px; }
+}
+@media (max-width: 720px) {
+    .tmta-login { padding: 24px 16px; }
+    .login-card { flex-direction: column; border-radius: 24px; min-height: 0; }
+    .login-form-panel { width: 100%; padding: 38px 28px 42px; }
+    .login-form-panel h1 { font-size: 29px; }
+    .login-form { margin-top: 30px; }
+    .login-options { font-size: 13px; gap: 12px; }
+    .login-brand { position: relative; inset: auto; clip-path: none; min-height: 245px; }
+    .brand-art img { width: 75%; top: -50%; left: 35%; }
+    .brand-copy { position: relative; inset: auto; padding: 32px 28px; max-width: 380px; }
+    .brand-copy h2 { font-size: 32px; margin-bottom: 12px; }
+    .brand-copy h2 br { display: none; }
+    .brand-copy h2 em { font-size: 36px; margin-left: 8px; }
+    .brand-eyebrow { font-size: 11px; margin-bottom: 12px; }
+    .brand-description { font-size: 14px; max-width: 270px; }
+    .skip-intro { bottom: 20px; right: 20px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+}
