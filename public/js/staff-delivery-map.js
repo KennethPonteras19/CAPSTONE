@@ -26,6 +26,7 @@ window.createStaffDeliveryMap = function ({ onChange, onBusyChange, onZoneChange
     if (!container || !address || !status || !overlay) {
         console.error('Delivery map HTML elements are missing.');
         return {
+            resize() {},
             setEnabled() {},
             reset() {},
             getSelectedZone() { return null; },
@@ -560,6 +561,9 @@ window.createStaffDeliveryMap = function ({ onChange, onBusyChange, onZoneChange
     });
 
     return {
+        resize() {
+            requestAnimationFrame(() => map?.invalidateSize());
+        },
         setEnabled(value) {
             const wasEnabled = enabled;
             enabled = Boolean(value);

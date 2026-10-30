@@ -14,6 +14,7 @@
 @push('styles')
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <link rel="stylesheet" href="{{ asset('css/staff/delivery-map.css') }}?v={{ filemtime(public_path('css/staff/delivery-map.css')) }}">
+<link rel="stylesheet" href="{{ asset('css/staff/pos-workflow.css') }}?v={{ filemtime(public_path('css/staff/pos-workflow.css')) }}">
 @endpush
 
 @section('content')
@@ -26,10 +27,43 @@
      data-catalog="{{ route('staff.catalog') }}"
      data-key="{{ (string) \Illuminate\Support\Str::uuid() }}">
 
-    <section class="panel pos-customer"><h2>1. Customer and Delivery Information</h2>
-        <div class="form-grid">
+    <nav class="pos-tabs" role="tablist" aria-label="Transaction steps">
+        <button type="button" id="tab-order" role="tab" aria-selected="true" aria-controls="step-order" data-step="0"><span class="step-number">1</span> Order Details<span class="step-check" hidden aria-label="Completed">✓</span></button>
+        <button type="button" id="tab-customer" role="tab" aria-selected="false" aria-controls="step-customer" tabindex="-1" data-step="1"><span class="step-number">2</span> Customer &amp; Delivery Details<span class="step-check" hidden aria-label="Completed">✓</span></button>
+        <button type="button" id="tab-payment" role="tab" aria-selected="false" aria-controls="step-payment" tabindex="-1" data-step="2"><span class="step-number">3</span> Payment &amp; Checkout</button>
+    </nav>
+    <div class="pos-stage">
+        <div class="pos-panels">
+            <section id="step-order" class="pos-step" role="tabpanel" aria-labelledby="tab-order">
+                <div class="pos-order-grid">
+                    <section class="pos-catalog" aria-label="Product catalog">        <div class="workspace-toolbar">
+            <input id="productSearch" placeholder="Search product…" aria-label="Search catalog">
 
-            <label for="customerId">Customer Name
+            <select id="categoryFilter" aria-label="Category">
+                <option value="">All categories</option>
+                @foreach($products->pluck('category')->unique()->sort() as $category)
+                    <option>{{ $category }}</option>
+                @endforeach
+            </select>
+
+            <button type="button" class="secondary" id="refreshCatalog">Refresh</button>
+        </div>
+
+        <p class="sync-note" id="catalogStatus">Catalog refreshes every 30 seconds.</p>
+        <div class="catalog-grid" id="productGrid" tabindex="0" aria-label="Products"></div>
+
+        <noscript>
+            <p class="notice error">Enable JavaScript to use Point of Sale.</p>
+        </noscript>
+</section>
+                    <section class="panel pos-cart"><h2>Current Order</h2><div id="cartItems" class="pos-scroll" tabindex="0" aria-label="Cart items"></div><button type="button" class="danger" id="clearCart">Clear Cart</button></section>
+                </div>
+                <footer class="pos-step-actions"><button type="button" class="primary" data-step="1">Continue to Customer Details</button></footer>
+            </section>
+            <section id="step-customer" class="pos-step" role="tabpanel" aria-labelledby="tab-customer" hidden>
+                <div class="panel pos-scroll" tabindex="0" aria-label="Customer and delivery information"><h2>Customer &amp; Delivery Details</h2>        <div class="form-grid">
+
+            <label for="customerId">Customer
                 <select id="customerId">
                     <option value="">Walk-in customer</option>
                     @foreach($customers as $customer)
@@ -37,11 +71,31 @@
                     @endforeach
                 </select>
             </label>
-            <label for="customerPhone">Customer Contact Number<input id="customerPhone" readonly placeholder="Saved customer phone"></label>
 
-
+            <label>Customer name<input id="customerName" value="Walk-in customer" readonly></label>
+            <label>Contact number<input id="customerPhone" value="" readonly placeholder="No saved contact number"></label>
+            <p class="sync-note full">Name and contact number use the selected customer's saved details.</p>
+            <label class="full" for="orderType">Order Type
+                <select id="orderType" name="type" required>
+                    <option value="Walk-in" @selected(($draft?->type ?? 'Walk-in') === 'Walk-in')>Walk-in</option>
+                    <option value="Pickup" @selected(($draft?->type ?? '') === 'Pickup')>Pickup</option>
+                    <option value="Delivery" @selected(($draft?->type ?? '') === 'Delivery')>Delivery</option>
+                </select>
+            </label>
 
             <!-- DELIVERY LOCATION -->
+            <div class="full delivery-location" id="deliveryDetails" hidden>
+        <label for="deliveryFee">Delivery Fee
+            <input
+                id="deliveryFee"
+                type="number"
+                min="0"
+                max="1000000"
+                step="0.01"
+                value="{{ $draft?->delivery_fee ?? 0 }}"
+                readonly
+            >
+        </label>
             <div class="full" id="deliveryMapHome"><div class="delivery-location" id="deliveryMapPanel">
                 <label for="deliveryAddress">Delivery Address (required for Delivery)</label>
 
@@ -133,75 +187,17 @@
 
 
             </div>
-            </div><label class="full" for="orderNotes">Delivery / Order Notes (optional)
-                <textarea id="orderNotes" maxlength="2000" placeholder="Receiver name and contact if different, delivery instructions, or other notes">{{ $draft?->notes }}</textarea>
-            </label>
-        </div>
-</section>
-    <section class="panel pos-type"><h2>2. Order Details</h2><div class="form-grid">            <!-- RESTORED ORDER TYPE -->
-            <label class="full" for="orderType">Order Type
-                <select id="orderType" name="type" required>
-                    <option value="Walk-in" @selected(($draft?->type ?? 'Walk-in') === 'Walk-in')>Walk-in</option>
-                    <option value="Pickup" @selected(($draft?->type ?? '') === 'Pickup')>Pickup</option>
-                    <option value="Delivery" @selected(($draft?->type ?? '') === 'Delivery')>Delivery</option>
-                </select>
-            </label></div></section>
-    <section class="panel pos-products" aria-label="Product selection">
-        <div class="workspace-toolbar">
-            <input id="productSearch" placeholder="Search product…" aria-label="Search catalog">
-
-            <select id="categoryFilter" aria-label="Category">
-                <option value="">All categories</option>
-                @foreach($products->pluck('category')->unique()->sort() as $category)
-                    <option>{{ $category }}</option>
-                @endforeach
-            </select>
-
-            <button type="button" class="secondary" id="refreshCatalog">Refresh</button>
-        </div>
-
-        <p class="sync-note" id="catalogStatus">Catalog refreshes every 30 seconds.</p>
-        <div class="catalog-grid" id="productGrid"></div>
-
-        <noscript>
-            <p class="notice error">Enable JavaScript to use Point of Sale.</p>
-        </noscript>
-    </section>
-
-    <aside class="panel pos-order">
-        <h2>Selected Products</h2>
-
-        <div id="cartItems"></div>
-
-        <div class="summary-list">
-            <div><span>Items</span><strong id="itemCount">0</strong></div>
-            <div><span>Subtotal</span><strong id="subtotal">₱0.00</strong></div>
-            <div><span>Discount</span><strong id="discountTotal">₱0.00</strong></div>
-        </div>
-
-        <label for="deliveryFee">Delivery Fee
-            <input
-                id="deliveryFee"
-                type="number"
-                min="0"
-                max="1000000"
-                step="0.01"
-                value="{{ $draft?->delivery_fee ?? 0 }}"
-                readonly
-            >
-        </label>
-
-    </aside>
-    <section class="panel pos-payment"><h2>3. Payment and Order Summary</h2>
-        <div class="summary-list">
-            <div class="grand-total">
-                <span>Total</span>
-                <strong id="grandTotal">₱0.00</strong>
+            </div>
             </div>
         </div>
 
-        <div class="form-grid">
-            <label for="paymentMethod">Payment Method (required)
+</div>
+                <footer class="pos-step-actions"><button type="button" class="secondary" data-step="0">Back to Order Details</button><button type="button" class="primary" data-step="2">Continue to Payment</button></footer>
+            </section>
+            <section id="step-payment" class="pos-step" role="tabpanel" aria-labelledby="tab-payment" hidden>
+                <div class="panel pos-scroll" tabindex="0" aria-label="Payment information"><h2>Payment &amp; Checkout</h2>
+                    <h3>Selected products</h3><div id="checkoutItems"></div>        <div class="form-grid">
+            <label for="paymentMethod">Payment Method
                 <select id="paymentMethod">
                     <option>Cash</option>
                     <option>Online</option>
@@ -214,11 +210,13 @@
                 <input id="amountTendered" type="number" min="0" max="99999999" step="0.01" value="0">
             </label>
 
-            <label class="full" for="paymentReference">Payment Reference (required for Online / Cheque)
+            <label class="full" for="paymentReference">Payment Reference
                 <input id="paymentReference" maxlength="255" placeholder="Required for Online / Cheque">
             </label>
 
-
+            <label class="full" for="orderNotes">Notes
+                <textarea id="orderNotes" maxlength="2000">{{ $draft?->notes }}</textarea>
+            </label>
         </div>
 
         <div class="summary-list">
@@ -231,15 +229,41 @@
             Held orders and quotations do not reserve stock.
         </p>
 
-        <p id="orderReview" class="sync-note" aria-live="polite"></p><h2>4. Confirm Order</h2>
-        <div class="checkout-actions">
-            <button type="button" class="primary" data-save="checkout">Complete Order</button>
+
+                </div>
+                <footer class="pos-step-actions"><button type="button" class="secondary" data-step="1">Back to Customer Details</button><button type="button" class="primary" data-save="checkout">Complete Transaction</button></footer>
+            </section>
+        </div>
+        <aside class="panel pos-summary" tabindex="0" aria-label="Order summary">
+            <h2>Order Summary</h2>
+            <p id="summaryCustomer">Walk-in customer</p><p class="sync-note" id="summaryOrderType">Walk-in</p>
+            <details class="summary-products"><summary>Selected products</summary><div id="summaryItems" tabindex="0" aria-label="Selected products"></div></details>
+                    <div class="summary-list">
+            <div><span>Items</span><strong id="itemCount">0</strong></div>
+            <div><span>Subtotal</span><strong id="subtotal">₱0.00</strong></div>
+            <div><span>Discount</span><strong id="discountTotal">₱0.00</strong></div>
+        </div>
+
+<div class="summary-list"><div><span>Delivery fee</span><strong id="summaryDeliveryFee">₱0.00</strong></div></div>
+
+        <div class="summary-list">
+            <div class="grand-total">
+                <span>Total</span>
+                <strong id="grandTotal">₱0.00</strong>
+            </div>
+        </div>
+
+
+            <p class="sync-note" id="summaryPayment"></p>
+            <p id="orderReview" class="sync-note" aria-live="polite"></p>
+                    <div class="checkout-actions">
             <button type="button" class="secondary" data-save="hold">Hold Order</button>
             <button type="button" class="secondary" data-save="quote">Save Quotation</button>
-            <button type="button" class="danger" id="clearCart">Clear Cart</button>
             @moduleRoute('staff', 'orders')<a class="ui-back" href="{{ route('orders') }}">Return to Orders</a>@endmoduleRoute
         </div>
-    </section>
+
+        </aside>
+    </div>
     <dialog id="deliveryMapDialog" class="delivery-map-dialog" aria-labelledby="expandedMapTitle">
         <header class="delivery-dialog-header"><h2 id="expandedMapTitle">Delivery Location</h2><button type="button" class="secondary" id="closeDeliveryMap">Close map</button></header>
         <div id="expandedMapContent"></div>

@@ -1,7 +1,7 @@
 <?php
 
 // Render the real POS with isolated data and deterministic map/network responses.
-// Usage: php tests/Browser/staff-delivery-map.php <output.html>
+// Usage: php tests/Browser/staff-delivery-map.php <output.html> (or --render-only for the workflow runner)
 require dirname(__DIR__, 2).'/vendor/autoload.php';
 putenv('APP_ENV=testing');
 putenv('DB_CONNECTION=sqlite');
@@ -17,7 +17,7 @@ foreach (glob(database_path('migrations/*.php')) as $path) {
     if (!str_contains(basename($path), 'purchase_order_items')) (require $path)->up();
 }
 Illuminate\Support\Facades\Auth::guard('staff')->setUser(new App\Models\Staff([
-    'name' => 'Delivery Test', 'role' => 'Staff', 'permissions' => ['pos'],
+    'name' => 'Delivery Test', 'role' => 'Staff', 'permissions' => ($argv[1] ?? '') === '--render-only' ? array_keys(config('modules.staff')) : ['pos'],
 ]));
 $html = view('staff.pos', [
     'errors' => new Illuminate\Support\ViewErrorBag,
@@ -31,6 +31,10 @@ $html = preg_replace_callback('~<link\b[^>]*href="([^"]+)"[^>]*>~', function ($m
         ? '<style>'.file_get_contents(public_path(ltrim($path, '/'))).'</style>' : '';
 }, $html);
 $html = preg_replace('~<script\b[^>]*\bsrc=[^>]*>.*?</script>|<img\b[^>]*>~s', '', $html);
+if (($argv[1] ?? '') === '--render-only') {
+    echo $html;
+    exit;
+}
 $fixture = <<<'JS'
 const errors = [];
 window.addEventListener('error', event => errors.push(event.message));
@@ -79,6 +83,7 @@ $checks = <<<'JS'
         assert(!errors.length, errors.join('; '));
         assert(byId('deliveryFee').readOnly, 'Fee must be calculated automatically');
         document.querySelector('.catalog-card').click();
+        byId('tab-customer').click();
         byId('customerId').value = '1';
         byId('customerId').dispatchEvent(new Event('change'));
         byId('orderType').value = 'Delivery';
@@ -152,6 +157,7 @@ $checks = <<<'JS'
         await wait();
         byId('amountTendered').value = '1000';
         byId('amountTendered').dispatchEvent(new Event('input'));
+        byId('tab-payment').click();
         document.querySelector('[data-save="checkout"]').click();
         document.querySelector('[data-save="checkout"]').click();
         assert(checkoutCount === 1, 'Duplicate clicks send one request');

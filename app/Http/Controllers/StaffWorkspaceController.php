@@ -19,7 +19,7 @@ class StaffWorkspaceController extends Controller
         abort_if($draft && ! $draft->isDraft(), 409, 'Only held orders and quotations can be resumed.');
 
         return view('staff.pos', [
-            'products' => Product::orderBy('name')->get(['id', 'name', 'category', 'price', 'stock', 'image_path']),
+            'products' => Product::orderBy('name')->get(['id', 'name', 'category', 'price', 'stock', 'stock_unit', 'image_path']),
             'customers' => Customer::where('is_active', true)->orderBy('name')->get(['id', 'name', 'phone', 'address']),
             'draft' => $draft,
         ]);
@@ -27,7 +27,7 @@ class StaffWorkspaceController extends Controller
 
     public function catalog()
     {
-        return response()->json(Product::orderBy('name')->get(['id', 'name', 'category', 'price', 'stock', 'image_path']))->header('Cache-Control', 'no-store');
+        return response()->json(Product::orderBy('name')->get(['id', 'name', 'category', 'price', 'stock', 'stock_unit', 'image_path']))->header('Cache-Control', 'no-store');
     }
 
     public function checkout(Request $request, StaffOrderService $service)

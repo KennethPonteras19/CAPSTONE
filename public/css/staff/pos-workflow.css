@@ -1,0 +1,116 @@
+/* POS-only overrides: the shared workspace stylesheet also serves other modules. */
+.workspace-main:has(#posApp) { height: 100dvh; min-height: 0; display: flex; flex-direction: column; overflow: hidden; }
+.workspace-main:has(#posApp) .workspace-heading { flex-shrink: 0; margin-bottom: 16px; }
+.workspace-main:has(#posApp) > .workspace-topbar, .workspace-main:has(#posApp) > .ui-back { flex-shrink: 0; }
+.workspace-main:has(#posApp) #posError { flex-shrink: 0; max-height: 90px; overflow: auto; }
+#posApp.pos-workspace { --accent: #f4cf55; --ink: #211d25; --muted: #726d78; --line: #e7e4e9; display: flex; flex-direction: column; flex: 1 1 0; height: 0; min-height: 0; gap: 14px; overflow: hidden; }
+#posApp [hidden] { display: none !important; }
+#posApp .pos-tabs { display: flex; flex: 0 0 auto; gap: 6px; padding: 6px; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+#posApp .pos-tabs button { flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 8px; background: transparent; color: var(--muted); border: 1px solid transparent; font-size: 13px; }
+#posApp .pos-tabs [aria-selected="true"] { background: #fff7db; border-color: var(--accent); color: var(--ink); }
+#posApp .step-number { display: inline-grid; place-items: center; width: 24px; height: 24px; border: 1px solid currentColor; border-radius: 50%; flex-shrink: 0; font-size: 12px; }
+#posApp .step-check { font-weight: 700; }
+#posApp .pos-stage { flex: 1; display: grid; grid-template-columns: minmax(0, 1fr) 270px; gap: 16px; min-height: 0; }
+#posApp .pos-panels, #posApp .pos-step { min-width: 0; min-height: 0; height: 100%; }
+#posApp .pos-step { display: flex; flex-direction: column; gap: 12px; overflow: hidden; }
+#posApp .pos-order-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(230px, 36%); gap: 14px; flex: 1; min-height: 0; }
+#posApp .pos-catalog, #posApp .pos-cart { display: flex; flex-direction: column; min-height: 0; min-width: 0; overflow: hidden; }
+#posApp .pos-cart { margin: 0; padding: 16px; }
+#posApp .pos-cart > button { flex-shrink: 0; margin-top: 12px; }
+#posApp .pos-scroll { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; scrollbar-width: none; overscroll-behavior: contain; }
+#posApp .pos-scroll.panel { margin: 0; padding: 20px; }
+#posApp .pos-scroll::-webkit-scrollbar, #posApp .pos-summary::-webkit-scrollbar { display: none; }
+#posApp #productGrid.catalog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); grid-auto-rows: max-content; align-content: start; flex: 1; height: 0; min-height: 0; overflow-y: auto; scrollbar-width: none; gap: 10px; }
+#posApp #productGrid::-webkit-scrollbar { display: none; }
+#posApp .workspace-toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 0; }
+#posApp .workspace-toolbar input { flex: 1 1 160px; width: 0; }
+#posApp .workspace-toolbar select { flex: 1 1 120px; width: 0; }
+#posApp .pos-step-actions { display: flex; flex: 0 0 auto; flex-wrap: wrap; justify-content: space-between; gap: 8px; padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: #fff; }
+#posApp .pos-step-actions > :last-child { margin-left: auto; }
+#posApp .pos-summary { min-height: 0; min-width: 0; margin: 0; padding: 18px; overflow-y: auto; scrollbar-width: none; }
+#posApp .pos-summary > p { overflow-wrap: anywhere; }
+#posApp .summary-list { margin: 14px 0; }
+#posApp .checkout-actions { display: grid; grid-template-columns: 1fr; gap: 8px; }
+#posApp .checkout-item { padding: 8px 0; margin: 0; border-bottom: 1px solid var(--line); }
+#posApp .summary-products { margin: 12px 0; }
+#posApp .summary-products > div { max-height: 150px; overflow: auto; scrollbar-width: none; font-size: 12px; }
+#posApp .form-grid { gap: 14px; }
+#posApp input[readonly] { background: #f6f5f7; }
+#posApp [aria-invalid="true"] { border-color: #9f2626; outline-color: #9f2626; }
+#posApp .field-error { display: block; color: #9f2626; font-size: 12px; line-height: 1.4; }
+#posApp .delivery-location { border-top: 1px solid var(--line); padding-top: 14px; }
+#posApp #deliveryMap { height: clamp(240px, 38vh, 400px); }
+#posApp .delivery-map-dialog #deliveryMap { height: clamp(320px, 55dvh, 650px); }
+#posApp .delivery-map-dialog, #posApp .delivery-search-results { scrollbar-width: none; }
+#posApp .delivery-map-dialog::-webkit-scrollbar, #posApp .delivery-search-results::-webkit-scrollbar, #posApp .summary-products > div::-webkit-scrollbar { display: none; }
+#posApp .cart-row-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 1100px) {
+    #posApp .pos-stage { grid-template-columns: minmax(0, 1fr) 230px; gap: 10px; }
+    #posApp .pos-order-grid { grid-template-columns: minmax(0, 1fr) 230px; gap: 10px; }
+}
+@media (max-width: 900px) {
+    #posApp .pos-stage { display: flex; flex-direction: column; }
+    #posApp .pos-panels { flex: 1; height: 0; }
+    #posApp .pos-summary { flex: 0 0 auto; max-height: 150px; padding: 10px 14px; }
+    #posApp .pos-summary { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-content: start; gap: 4px 10px; }
+    #posApp .pos-summary h2 { grid-column: 1; grid-row: 1; }
+    #posApp .pos-summary > .summary-list:has(.grand-total) { grid-column: 2; grid-row: 1; margin: 0; }
+    #posApp .pos-summary .grand-total { border: 0; padding: 0; font-size: 15px; }
+    #posApp .pos-summary > :not(h2):not(.summary-list:has(.grand-total)) { grid-column: 1 / -1; }
+    #posApp .pos-summary h2 { font-size: 14px; margin: 0 0 6px; }
+    #posApp .pos-summary > p { display: inline; margin-right: 10px; }
+    #posApp .pos-summary .summary-list { display: inline-flex; flex-wrap: wrap; gap: 8px 14px; margin: 6px 12px 6px 0; }
+    #posApp .pos-summary .summary-list > div { gap: 8px; }
+    #posApp .pos-summary .checkout-actions { display: flex; flex-wrap: wrap; }
+    #posApp .pos-summary .checkout-actions button { padding: 6px 10px; font-size: 12px; }
+}
+@media (max-width: 600px) {
+    #posApp .pos-tabs { gap: 2px; padding: 3px; }
+    #posApp .pos-tabs button { flex-direction: column; gap: 4px; font-size: 11px; padding: 8px 4px; }
+    #posApp .step-check { display: none; }
+    #posApp .pos-tabs button:has(.step-check:not([hidden])) .step-number { background: var(--accent); }
+    #posApp .pos-order-grid { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(120px, 1fr) minmax(120px, 1fr); }
+    #posApp #productGrid.catalog-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    #posApp .pos-step-actions { padding: 8px; }
+    #posApp .pos-step-actions button { font-size: 12px; padding: 9px; }
+    #posApp .pos-scroll.panel { padding: 14px; }
+    #posApp .catalog-card { min-height: 104px; padding: 8px; gap: 3px; display: grid; grid-template-columns: 24px minmax(0, 1fr); align-content: start; }
+    #posApp .catalog-card .product-symbol { grid-row: 1 / 4; font-size: 16px; }
+    #posApp .catalog-card .catalog-product-photo { width: 24px; height: 32px; object-fit: contain; }
+    #posApp .catalog-card > :not(.product-symbol) { grid-column: 2; }
+    #posApp .catalog-card strong { font-size: 12px; }
+    #posApp .catalog-card small { font-size: 10px; }
+}
+@media (max-width: 768px) {
+    /* Keep every permitted module accessible in a compact horizontal mobile menu. */
+    body:has(#posApp) .dashboard-layout { display: flex; flex-direction: column; height: 100dvh; min-height: 0; }
+    body:has(#posApp) .admin-sidebar { flex: 0 0 56px; height: 56px; min-height: 0; flex-direction: row; gap: 8px; padding: 8px; overflow: hidden; }
+    body:has(#posApp) .admin-sidebar-brand, body:has(#posApp) .admin-sidebar-account { display: none; }
+    body:has(#posApp) .admin-sidebar-menu { display: flex; flex: 1; min-width: 0; gap: 4px; margin: 0; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; }
+    body:has(#posApp) .admin-sidebar-menu::-webkit-scrollbar { display: none; }
+    body:has(#posApp) .admin-sidebar-menu li { flex-shrink: 0; margin: 0; }
+    body:has(#posApp) .admin-sidebar-menu a { white-space: nowrap; font-size: 12px; padding: 8px; }
+    body:has(#posApp) .admin-sidebar-logout { flex-shrink: 0; margin: 0; padding: 0; border: 0; }
+    .workspace-main:has(#posApp) { flex: 1; height: 0; padding: 12px; }
+    .workspace-main:has(#posApp) .workspace-topbar { display: none; }
+    .workspace-main:has(#posApp) .workspace-heading { flex-direction: row; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .workspace-main:has(#posApp) .workspace-heading h1 { font-size: 22px; }
+    .workspace-main:has(#posApp) .workspace-heading p { font-size: 12px; }
+    .workspace-main:has(#posApp) .workspace-heading .no-print { display: flex; flex-wrap: wrap; gap: 4px; justify-content: flex-end; }
+    .workspace-main:has(#posApp) .workspace-heading .button { font-size: 11px; padding: 6px 8px; }
+    #posApp .pos-tabs button { min-width: 0; }
+    #posApp .workspace-toolbar { padding: 8px; }
+    #posApp .workspace-toolbar input { flex-basis: 100px; }
+    #posApp .workspace-toolbar select { flex-basis: 90px; }
+    #posApp .workspace-toolbar button { padding: 10px 8px; font-size: 12px; }
+    #posApp .pos-catalog > .sync-note { margin: 6px 0; }
+    #posApp .pos-cart { padding: 12px; }
+    #posApp .pos-cart h2 { font-size: 16px; margin-bottom: 6px; }
+}
+@media (max-height: 650px) {
+    html:has(#posApp), body:has(#posApp) { height: auto; overflow: auto; }
+    .workspace-main:has(#posApp) { height: auto; min-height: 100dvh; overflow: visible; }
+    #posApp.pos-workspace { flex: none; height: 650px; }
+    body:has(#posApp) .dashboard-layout { height: auto; min-height: 100dvh; }
+    .workspace-main:has(#posApp) { flex: none; }
+}
