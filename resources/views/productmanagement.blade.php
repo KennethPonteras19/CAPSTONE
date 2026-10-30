@@ -62,20 +62,19 @@
     </div>
      <!-- TOPBAR -->
     <div class="topbar">
+        
 
         <input type="search"
                id="productSearch"
                aria-label="Search products by name, category, or brand"
                aria-controls="productTable"
                placeholder="Search name, category or brand">
+<div class="right-section"> 
+                <!-- DATE AND TIME -->
+                <div id="datetime" class="datetime"></div>
 
 
-
-        <div class="right-section">
-
-            <div id="datetime"
-                 class="datetime">
-            </div>
+       
 
 
 

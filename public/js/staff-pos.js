@@ -15,6 +15,20 @@
     const errorBox = byId('posError');
     const showError = message => { errorBox.textContent = message; errorBox.hidden = !message; if (message) errorBox.scrollIntoView({block: 'nearest'}); };
     const element = (tag, text, className) => { const node = document.createElement(tag); if (text !== undefined) node.textContent = text; if (className) node.className = className; return node; };
+    function fieldErrors(errors = {}) {
+        app.querySelectorAll('.field-error').forEach(node => node.remove());
+        app.querySelectorAll('[aria-invalid]').forEach(node => { node.removeAttribute('aria-invalid'); node.removeAttribute('aria-errormessage'); });
+        const fields = {customer_id: 'customerId', address: 'deliveryAddress', notes: 'orderNotes', type: 'orderType', payment_method: 'paymentMethod', amount_tendered: 'amountTendered', reference: 'paymentReference'};
+        Object.entries(errors).forEach(([key, messages]) => {
+            const input = byId(fields[key]);
+            if (!input) return;
+            const feedback = element('span', [].concat(messages).join(' '), 'field-error');
+            feedback.id = `${input.id}Error`;
+            input.setAttribute('aria-invalid', 'true');
+            input.setAttribute('aria-errormessage', feedback.id);
+            input.after(feedback);
+        });
+    }
     const deliveryMap = window.createStaffDeliveryMap({
         onChange: () => { changed = true; },
         onZoneChange: zone => {
@@ -86,6 +100,9 @@
                 wrapper.append(input); fields.append(wrapper);
             });
             row.append(header, element('p', product ? `${money(cents(product.price))} each · ${product.stock} available` : 'Remove this item to continue.', 'sync-note'), fields);
+            const lineTotal = element('p', '', 'line-subtotal');
+            lineTotal.dataset.productTotal = item.product_id;
+            row.append(lineTotal);
             container.append(row);
         });
         if (!cart.length) container.append(element('p', 'Select a product to start an order.', 'empty-state'));
@@ -101,6 +118,11 @@
 
     function updateTotals() {
         const values = totals();
+        cart.forEach(item => {
+            const gross = cents(productFor(item)?.price) * item.quantity;
+            const line = app.querySelector(`[data-product-total="${item.product_id}"]`);
+            if (line) line.textContent = `Item subtotal: ${money(gross - Math.round(gross * item.discount_percent / 100))}`;
+        });
         const isCash = byId('paymentMethod').value === 'Cash';
         const isCharge = byId('paymentMethod').value === 'Charge';
         byId('amountTendered').disabled = isCharge || saving;
@@ -113,7 +135,13 @@
         byId('balanceDue').textContent = money(Math.max(0, values.total - tendered));
         const delivery = byId('orderType').value === 'Delivery';
         byId('deliveryFee').disabled = !delivery || saving;
-        byId('deliveryAddress').disabled = !delivery || saving;
+        byId('deliveryAddress').disabled = saving;
+        byId('deliveryAddress').required = delivery;
+        byId('customerId').required = delivery || isCharge;
+        byId('paymentReference').required = ['Online', 'Cheque'].includes(byId('paymentMethod').value);
+        const customer = data.customers.find(customer => customer.id === Number(byId('customerId').value));
+        byId('customerPhone').value = customer?.phone || '';
+        byId('orderReview').textContent = `${customer?.name || 'Walk-in customer'} · ${byId('orderType').value} · ${byId('itemCount').textContent} items · ${money(values.total)} · ${byId('paymentMethod').value}${isCharge ? ' (Pay Later)' : ''}. Review the details before confirming.`;
         deliveryMap.setEnabled(delivery && !saving);
         updateSaveButtons();
     }
@@ -144,13 +172,15 @@
 
     async function save(action) {
         if (saving || !cart.length) return;
+        fieldErrors();
         if (byId('orderType').value === 'Delivery' && locatingAddress) { showError('Wait for the delivery address to finish loading.'); return; }
         if (action === 'checkout' && byId('orderType').value === 'Delivery' && !byId('deliveryAddress').value.trim()) {
             showError('Pin a delivery location or enter the full delivery address before completing the order.');
             byId('deliveryAddress').focus();
             return;
         }
-        for (const input of app.querySelectorAll('input, textarea')) {
+        for (const input of app.querySelectorAll('input, select, textarea')) {
+            if (action !== 'checkout' && ['customerId', 'deliveryAddress', 'paymentReference'].includes(input.id)) continue;
             if (!input.disabled && !input.reportValidity()) return;
         }
         if (cart.some(item => !productFor(item))) { showError('Remove unavailable products from the order.'); return; }
@@ -164,6 +194,10 @@
             items: cart.map(item => ({product_id: item.product_id, quantity: item.quantity, discount_percent: item.discount_percent, expected_price: productFor(item).price})),
         };
         saving = true;
+        app.setAttribute('aria-busy', 'true');
+        const saveButton = app.querySelector(`[data-save="${action}"]`);
+        const saveLabel = saveButton.textContent;
+        saveButton.textContent = 'Saving…';
         deliveryMap.setEnabled(false);
         showError('');
         app.querySelectorAll('button, input, select, textarea').forEach(control => { control.disabled = true; });
@@ -171,12 +205,15 @@
             const response = await fetch(app.dataset.checkout, {method: 'POST', headers: {'Content-Type': 'application/json', Accept: 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content}, body: JSON.stringify(payload)});
             if (!response.headers.get('content-type')?.includes('application/json')) throw new Error('Your session may have expired. Keep this page open and sign in again in another tab.');
             const result = await response.json();
+            if (!response.ok) fieldErrors(result.errors);
             if (!response.ok) throw new Error(result.errors ? Object.values(result.errors).flat().join(' ') : (result.message || 'Could not save this order.'));
             leaving = true;
             window.location.assign(result.redirect);
         } catch (error) {
             showError(error.message || 'Could not save the order. Please try again.');
             saving = false;
+            app.setAttribute('aria-busy', 'false');
+            saveButton.textContent = saveLabel;
             app.querySelectorAll('button, input, select, textarea').forEach(control => { control.disabled = false; });
             renderCatalog();
             updateTotals();
@@ -189,10 +226,15 @@
     ['orderType', 'deliveryFee', 'paymentMethod', 'amountTendered'].forEach(id => byId(id).addEventListener('input', () => { changed = true; updateTotals(); }));
     byId('customerId').addEventListener('change', () => {
         const customer = data.customers.find(customer => customer.id === Number(byId('customerId').value));
-        byId('deliveryAddress').value = customer?.address || '';
+        if (!byId('deliveryAddress').value.trim() || !byId('deliveryAddress').dataset.manual) {
+            byId('deliveryAddress').value = customer?.address || '';
+        }
         deliveryMap.reset();
+        updateTotals();
         changed = true;
     });
+    byId('deliveryAddress').addEventListener('input', () => { byId('deliveryAddress').dataset.manual = 'true'; changed = true; });
+    byId('orderNotes').addEventListener('input', () => { changed = true; });
     byId('clearCart').addEventListener('click', () => { if (window.confirm('Clear the current cart? Saved orders will remain in Orders.')) { cart = []; changed = false; renderCart(); showError(''); } });
     document.querySelectorAll('[data-save]').forEach(button => button.addEventListener('click', () => save(button.dataset.save)));
     window.addEventListener('beforeunload', event => { if (!leaving && changed && cart.length) { event.preventDefault(); event.returnValue = ''; } });

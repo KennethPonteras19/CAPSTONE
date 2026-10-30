@@ -9,6 +9,17 @@
         clock.dateTime = now.toISOString();
     };
     updateClock();
+    document.querySelectorAll('[data-customer-action]').forEach(link => {
+        link.addEventListener('click', event => {
+            if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+            link.setAttribute('aria-busy', 'true');
+            // Native navigation retains the server's validation and error responses.
+        });
+    });
+    window.addEventListener('pageshow', () => {
+        document.querySelectorAll('[data-customer-action]').forEach(link => link.removeAttribute('aria-busy'));
+        if (location.hash === '#customerForm') document.getElementById('customerForm')?.focus();
+    });
     setInterval(updateClock, 1000);
     let dirty = false;
     document.addEventListener('input', () => { dirty = true; });

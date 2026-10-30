@@ -135,10 +135,28 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .more-hero .hero-image img { width: 140px; height: 140px; object-fit: contain; }
 .more-main .hero-label, .more-main .contact-icon, .more-main .map-pin,
 .more-main .map-link, .more-main .about-icon, .more-main .services-heading-icon, .more-main .service-arrow { color: #79600c; }
-.more-info-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.contact-panel { grid-column: auto; }
+.more-info-grid { grid-template-columns: minmax(0, .9fr) minmax(0, 1.6fr); grid-template-rows: auto auto; }
+.contact-panel { grid-column: 1; grid-row: 1; }
+.location-panel { grid-column: 2; grid-row: 1; }
+.store-map, .store-map iframe { min-height: 360px; }
 .contact-item strong, .contact-item p { overflow-wrap: anywhere; }
 .services-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.more-main .service-link { width: 100%; border: 0; border-right: 1px solid var(--customer-line); background: transparent; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.more-main .service-link:last-child { border-right: 0; }
+.more-main .service-link:focus-visible, .service-dialog-close:focus-visible { outline: 3px solid #79600c; outline-offset: 3px; }
+.service-info-dialog { width: min(560px, calc(100% - 32px)); max-height: min(80vh, 680px); padding: 0; border: 1px solid var(--customer-line); border-radius: 12px; color: var(--customer-ink); box-shadow: 0 20px 60px rgb(25 25 35 / 25%); }
+.service-info-dialog { position: fixed; inset: 50% auto auto 50%; transform: translate(-50%, -50%); margin: 0; overflow-y: auto; }
+.service-info-dialog::backdrop { background: rgb(20 22 28 / 55%); }
+.service-dialog-header { position: relative; display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 20px 64px 20px 22px; border-bottom: 1px solid var(--customer-line); }
+.service-dialog-header h2 { margin: 0; font-size: 20px; }
+.service-dialog-close { position: absolute; top: 10px; right: 10px; display: grid; place-items: center; width: 40px; height: 40px; border: 0; border-radius: 6px; background: transparent; color: var(--customer-ink); font-size: 28px; line-height: 1; cursor: pointer; }
+.service-dialog-content { padding: 20px 22px 24px; font-size: 14px; line-height: 1.65; }
+.service-dialog-content[hidden] { display: none; }
+.service-dialog-content p { margin: 0 0 14px; }
+.service-dialog-content p:last-child { margin-bottom: 0; }
+.service-dialog-content ul { margin: 0 0 14px; padding-left: 22px; }
+.service-dialog-content li + li { margin-top: 6px; }
+.service-dialog-content a { color: #79600c; text-decoration: underline; text-underline-offset: 2px; }
 .order-modal-overlay { padding: 16px; overflow-y: auto; }
 .order-modal { width: 520px; max-height: calc(100dvh - 32px); overflow-y: auto; padding: 28px; border-radius: 16px; }
 .modal-product { gap: 18px; padding-right: 20px; }
@@ -165,6 +183,12 @@ body.customer-modal-open { overflow: hidden; }
     .fulfillment-options, .customer-fields { grid-template-columns: minmax(0, 1fr); }
 }
 @media (max-width: 800px) {
+    .more-info-grid { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto; }
+    .contact-panel, .location-panel { grid-column: auto; grid-row: auto; }
+    .location-panel { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto; }
+    .location-panel > h2, .location-panel .visit-hours, .location-panel .store-map, .location-panel .map-link { grid-column: 1; grid-row: auto; }
+    .location-panel .visit-hours { min-height: 0; flex-direction: row; align-items: center; justify-content: space-between; }
+    .store-map, .store-map iframe { min-height: 300px; }
     .sidebar { position: static; width: 100%; height: auto; padding: 14px 16px; overflow: visible; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px; }
     .brand { min-height: 0; padding: 0; border: 0; justify-content: flex-start; gap: 10px; }
     .customer-brand-logo { width: 40px; height: 40px; flex-basis: 40px; }

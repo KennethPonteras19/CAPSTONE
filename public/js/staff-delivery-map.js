@@ -17,6 +17,11 @@ window.createStaffDeliveryMap = function ({ onChange, onBusyChange, onZoneChange
     const zoneFee = byId('deliveryZoneFee');
     const locateButton = byId('locateDelivery');
     const centerButton = byId('pinDeliveryCenter');
+    const dialog = byId('deliveryMapDialog');
+    const panel = byId('deliveryMapPanel');
+    const expandButton = byId('expandDeliveryMap');
+    const mapTools = byId('deliveryMapTools');
+    let toolsWereOpen = false;
 
     if (!container || !address || !status || !overlay) {
         console.error('Delivery map HTML elements are missing.');
@@ -138,30 +143,35 @@ window.createStaffDeliveryMap = function ({ onChange, onBusyChange, onZoneChange
 
         const controller = new AbortController();
         zoneRequest = controller;
-        const response = await fetch(container.dataset.zoneUrl, {
-            method: 'POST',
-            signal: controller.signal,
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                ...(token ? { 'X-CSRF-TOKEN': token } : {})
-            },
-            body: JSON.stringify({ address: fullAddress })
-        });
+        const timeout = setTimeout(() => controller.abort(), 12000);
+        try {
+            const response = await fetch(container.dataset.zoneUrl, {
+                method: 'POST',
+                signal: controller.signal,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    ...(token ? { 'X-CSRF-TOKEN': token } : {})
+                },
+                body: JSON.stringify({ address: fullAddress })
+            });
 
-        const result = await response.json();
+            const result = await response.json();
 
-        if (version !== generation || !enabled) return;
+            if (version !== generation || !enabled) return;
 
-        if (!response.ok || !result.success || !result.zone) {
-            throw new Error(
-                result.message ||
-                'Could not identify the delivery zone. Check the address.'
-            );
+            if (!response.ok || !result.success || !result.zone) {
+                throw new Error(
+                    result.message ||
+                    'Could not identify the delivery zone. Check the address.'
+                );
+            }
+
+            showZone(result.zone);
+            message(`Delivery zone detected: ${result.zone.zone_name}.`);
+        } finally {
+            clearTimeout(timeout);
         }
-
-        showZone(result.zone);
-        message(`Delivery zone detected: ${result.zone.zone_name}.`);
     }
 
     function checkEnteredAddress() {
@@ -178,7 +188,7 @@ window.createStaffDeliveryMap = function ({ onChange, onBusyChange, onZoneChange
                 await lookupDeliveryZone(fullAddress, version);
             } catch (error) {
                 if (version === generation && enabled) {
-                    message(error.message || 'Could not identify the delivery zone.', true);
+                    message(error.name === 'AbortError' ? 'Delivery zone lookup timed out. Your address is still saved here; edit it to retry.' : (error.message || 'Could not identify the delivery zone.'), true);
                 }
             } finally {
                 if (version === generation) setBusy(false);
@@ -273,7 +283,7 @@ window.createStaffDeliveryMap = function ({ onChange, onBusyChange, onZoneChange
         }
     }
 
-    function pinLocation(latlng) {
+    function pinLocation(latlng, selectedAddress = null) {
         if (!enabled || !map) return;
 
         cancelLookup();
@@ -295,7 +305,7 @@ window.createStaffDeliveryMap = function ({ onChange, onBusyChange, onZoneChange
             });
         }
 
-        address.value = '';
+        // Keep the current address until an explicit selection resolves successfully.
         showZone(null);
 
         if (typeof onChange === 'function') {
@@ -306,6 +316,12 @@ window.createStaffDeliveryMap = function ({ onChange, onBusyChange, onZoneChange
         setBusy(true);
 
         const version = generation;
+
+        if (selectedAddress) {
+            address.value = selectedAddress;
+            checkEnteredAddress();
+            return;
+        }
 
         timer = setTimeout(() => {
             lookupAddress(point, version);
@@ -326,6 +342,7 @@ window.createStaffDeliveryMap = function ({ onChange, onBusyChange, onZoneChange
 
         const controller = new AbortController();
         searchRequest = controller;
+        const timeout = setTimeout(() => controller.abort(), 12000);
 
         if (searchButton) searchButton.disabled = true;
 
@@ -355,6 +372,7 @@ window.createStaffDeliveryMap = function ({ onChange, onBusyChange, onZoneChange
             }
 
             const result = await response.json();
+            if (searchRequest !== controller || controller.signal.aborted || !enabled) return;
             const features = (result.features || []).filter(feature =>
                 Array.isArray(feature.geometry?.coordinates) &&
                 feature.geometry.coordinates.length >= 2
@@ -379,14 +397,13 @@ window.createStaffDeliveryMap = function ({ onChange, onBusyChange, onZoneChange
                 button.type = 'button';
                 button.className = 'secondary';
                 button.textContent = label;
-                button.setAttribute('role', 'option');
 
                 button.addEventListener('click', () => {
                     if (!enabled) return;
 
                     searchResults.hidden = true;
                     map.setView(point, 16);
-                    pinLocation(point);
+                    pinLocation(point, label);
                 });
 
                 searchResults.appendChild(button);
@@ -395,11 +412,11 @@ window.createStaffDeliveryMap = function ({ onChange, onBusyChange, onZoneChange
             searchResults.hidden = false;
             message('Choose a search result to place the pin.');
         } catch (error) {
-            if (error.name !== 'AbortError') {
-                console.error(error);
-                message('Location search failed. Please try again.', true);
+            if (searchRequest === controller && enabled) {
+                message(error.name === 'AbortError' ? 'Search stopped. Search again or type the delivery address manually.' : 'Location search failed. Please try again or enter the address manually.', true);
             }
         } finally {
+            clearTimeout(timeout);
             if (searchRequest === controller && searchButton) {
                 searchButton.disabled = !enabled || !map || busy;
             }
@@ -489,6 +506,44 @@ window.createStaffDeliveryMap = function ({ onChange, onBusyChange, onZoneChange
 
     searchButton?.addEventListener('click', searchLocations);
 
+    // Move the same controls and Leaflet instance; opening/closing never changes data.
+    expandButton?.addEventListener('click', () => {
+        if (!dialog || !panel || !map) return;
+        toolsWereOpen = mapTools.open;
+        mapTools.open = true;
+        byId('expandedMapContent').append(panel);
+        expandButton.hidden = true;
+        dialog.showModal();
+        requestAnimationFrame(() => map.invalidateSize({pan: false}));
+        searchInput?.focus();
+    });
+    function restoreMap() {
+        if (!panel || panel.parentElement === byId('deliveryMapHome')) return;
+        byId('deliveryMapHome').append(panel);
+        mapTools.open = toolsWereOpen;
+        expandButton.hidden = false;
+        requestAnimationFrame(() => map?.invalidateSize({pan: false}));
+        expandButton.focus();
+    }
+    function closeMap() {
+        dialog.close();
+        restoreMap();
+    }
+    byId('closeDeliveryMap')?.addEventListener('click', closeMap);
+    dialog?.addEventListener('close', restoreMap);
+    dialog?.addEventListener('cancel', event => { event.preventDefault(); closeMap(); });
+    mapTools?.addEventListener('toggle', () => requestAnimationFrame(() => map?.invalidateSize({pan: false})));
+    dialog?.addEventListener('click', event => {
+        if (event.target !== dialog) return;
+        const bounds = dialog.getBoundingClientRect();
+        if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) closeMap();
+    });
+    searchInput?.addEventListener('input', () => {
+        searchRequest?.abort();
+        searchResults.replaceChildren();
+        searchResults.hidden = true;
+    });
+
     searchInput?.addEventListener('keydown', event => {
         if (event.key === 'Enter') {
             event.preventDefault();
@@ -508,6 +563,7 @@ window.createStaffDeliveryMap = function ({ onChange, onBusyChange, onZoneChange
         setEnabled(value) {
             const wasEnabled = enabled;
             enabled = Boolean(value);
+            if (expandButton) expandButton.disabled = !enabled || !map;
 
             if (!enabled) {
                 cancelLookup();

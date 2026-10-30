@@ -13,10 +13,11 @@
 
 @push('styles')
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
-<link rel="stylesheet" href="{{ asset('css/staff/delivery-map.css') }}">
+<link rel="stylesheet" href="{{ asset('css/staff/delivery-map.css') }}?v={{ filemtime(public_path('css/staff/delivery-map.css')) }}">
 @endpush
 
 @section('content')
+@moduleRoute('staff', 'orders')<x-back-link :fallback="route('orders')" label="Back to Orders" />@endmoduleRoute
 <div id="posError" class="notice error" role="alert" hidden></div>
 
 <div class="pos-workspace"
@@ -25,34 +26,10 @@
      data-catalog="{{ route('staff.catalog') }}"
      data-key="{{ (string) \Illuminate\Support\Str::uuid() }}">
 
-    <section>
-        <div class="workspace-toolbar">
-            <input id="productSearch" placeholder="Search product…" aria-label="Search catalog">
-
-            <select id="categoryFilter" aria-label="Category">
-                <option value="">All categories</option>
-                @foreach($products->pluck('category')->unique()->sort() as $category)
-                    <option>{{ $category }}</option>
-                @endforeach
-            </select>
-
-            <button type="button" class="secondary" id="refreshCatalog">Refresh</button>
-        </div>
-
-        <p class="sync-note" id="catalogStatus">Catalog refreshes every 30 seconds.</p>
-        <div class="catalog-grid" id="productGrid"></div>
-
-        <noscript>
-            <p class="notice error">Enable JavaScript to use Point of Sale.</p>
-        </noscript>
-    </section>
-
-    <aside class="panel pos-order">
-        <h2>Current Order</h2>
-
+    <section class="panel pos-customer"><h2>1. Customer and Delivery Information</h2>
         <div class="form-grid">
 
-            <label for="customerId">Customer
+            <label for="customerId">Customer Name
                 <select id="customerId">
                     <option value="">Walk-in customer</option>
                     @foreach($customers as $customer)
@@ -60,19 +37,27 @@
                     @endforeach
                 </select>
             </label>
+            <label for="customerPhone">Customer Contact Number<input id="customerPhone" readonly placeholder="Saved customer phone"></label>
 
-            <!-- RESTORED ORDER TYPE -->
-            <label class="full" for="orderType">Order Type
-                <select id="orderType" name="type" required>
-                    <option value="Walk-in" @selected(($draft?->type ?? 'Walk-in') === 'Walk-in')>Walk-in</option>
-                    <option value="Pickup" @selected(($draft?->type ?? '') === 'Pickup')>Pickup</option>
-                    <option value="Delivery" @selected(($draft?->type ?? '') === 'Delivery')>Delivery</option>
-                </select>
-            </label>
+
 
             <!-- DELIVERY LOCATION -->
-            <div class="full delivery-location">
-                <span id="deliveryMapLabel" class="delivery-map-label">Delivery Location</span>
+            <div class="full" id="deliveryMapHome"><div class="delivery-location" id="deliveryMapPanel">
+                <label for="deliveryAddress">Delivery Address (required for Delivery)</label>
+
+                <textarea
+                    id="deliveryAddress"
+                    maxlength="2000"
+                    rows="3"
+                    placeholder="Type the complete delivery address"
+                    aria-describedby="deliveryAddressHelp"
+                >{{ $draft?->address }}</textarea>
+
+                <p id="deliveryAddressHelp" class="delivery-map-help">
+                    Type freely, or select a map location. Add a house number, unit, or landmark.
+                </p><button type="button" class="secondary" id="expandDeliveryMap" aria-haspopup="dialog" aria-controls="deliveryMapDialog">Expand map</button>
+                <details id="deliveryMapTools" class="delivery-map-tools">
+                <summary id="deliveryMapLabel" class="delivery-map-label">Search or pin a delivery location</summary>
 
                 <p class="delivery-map-help" id="deliveryMapHelp">
                     Search for an address or click the map to place a pin.
@@ -102,7 +87,7 @@
                 <div
                     id="deliverySearchResults"
                     class="delivery-search-results"
-                    role="listbox"
+                    role="group"
                     aria-label="Location search results"
                     hidden
                 ></div>
@@ -131,6 +116,7 @@
                     </button>
                 </div>
 
+                </details>
                 <p id="deliveryMapStatus" class="delivery-map-help" role="status" aria-live="polite"></p>
 
                 <div id="deliveryZoneInfo" class="delivery-zone-info" aria-live="polite">
@@ -145,21 +131,45 @@
                     </p>
                 </div>
 
-                <label for="deliveryAddress">Full Address</label>
 
-                <textarea
-                    id="deliveryAddress"
-                    maxlength="2000"
-                    rows="3"
-                    placeholder="Pin a location to fill the address"
-                    aria-describedby="deliveryAddressHelp"
-                >{{ $draft?->address }}</textarea>
-
-                <p id="deliveryAddressHelp" class="delivery-map-help">
-                    Review the address and add a house number, unit, or landmark if needed.
-                </p>
             </div>
+            </div><label class="full" for="orderNotes">Delivery / Order Notes (optional)
+                <textarea id="orderNotes" maxlength="2000" placeholder="Receiver name and contact if different, delivery instructions, or other notes">{{ $draft?->notes }}</textarea>
+            </label>
         </div>
+</section>
+    <section class="panel pos-type"><h2>2. Order Details</h2><div class="form-grid">            <!-- RESTORED ORDER TYPE -->
+            <label class="full" for="orderType">Order Type
+                <select id="orderType" name="type" required>
+                    <option value="Walk-in" @selected(($draft?->type ?? 'Walk-in') === 'Walk-in')>Walk-in</option>
+                    <option value="Pickup" @selected(($draft?->type ?? '') === 'Pickup')>Pickup</option>
+                    <option value="Delivery" @selected(($draft?->type ?? '') === 'Delivery')>Delivery</option>
+                </select>
+            </label></div></section>
+    <section class="panel pos-products" aria-label="Product selection">
+        <div class="workspace-toolbar">
+            <input id="productSearch" placeholder="Search product…" aria-label="Search catalog">
+
+            <select id="categoryFilter" aria-label="Category">
+                <option value="">All categories</option>
+                @foreach($products->pluck('category')->unique()->sort() as $category)
+                    <option>{{ $category }}</option>
+                @endforeach
+            </select>
+
+            <button type="button" class="secondary" id="refreshCatalog">Refresh</button>
+        </div>
+
+        <p class="sync-note" id="catalogStatus">Catalog refreshes every 30 seconds.</p>
+        <div class="catalog-grid" id="productGrid"></div>
+
+        <noscript>
+            <p class="notice error">Enable JavaScript to use Point of Sale.</p>
+        </noscript>
+    </section>
+
+    <aside class="panel pos-order">
+        <h2>Selected Products</h2>
 
         <div id="cartItems"></div>
 
@@ -181,6 +191,8 @@
             >
         </label>
 
+    </aside>
+    <section class="panel pos-payment"><h2>3. Payment and Order Summary</h2>
         <div class="summary-list">
             <div class="grand-total">
                 <span>Total</span>
@@ -189,12 +201,12 @@
         </div>
 
         <div class="form-grid">
-            <label for="paymentMethod">Payment Method
+            <label for="paymentMethod">Payment Method (required)
                 <select id="paymentMethod">
                     <option>Cash</option>
                     <option>Online</option>
                     <option>Cheque</option>
-                    <option>Charge</option>
+                    <option value="Charge">Charge (Pay Later)</option>
                 </select>
             </label>
 
@@ -202,13 +214,11 @@
                 <input id="amountTendered" type="number" min="0" max="99999999" step="0.01" value="0">
             </label>
 
-            <label class="full" for="paymentReference">Payment Reference
+            <label class="full" for="paymentReference">Payment Reference (required for Online / Cheque)
                 <input id="paymentReference" maxlength="255" placeholder="Required for Online / Cheque">
             </label>
 
-            <label class="full" for="orderNotes">Notes
-                <textarea id="orderNotes" maxlength="2000">{{ $draft?->notes }}</textarea>
-            </label>
+
         </div>
 
         <div class="summary-list">
@@ -221,13 +231,19 @@
             Held orders and quotations do not reserve stock.
         </p>
 
+        <p id="orderReview" class="sync-note" aria-live="polite"></p><h2>4. Confirm Order</h2>
         <div class="checkout-actions">
             <button type="button" class="primary" data-save="checkout">Complete Order</button>
             <button type="button" class="secondary" data-save="hold">Hold Order</button>
             <button type="button" class="secondary" data-save="quote">Save Quotation</button>
             <button type="button" class="danger" id="clearCart">Clear Cart</button>
+            @moduleRoute('staff', 'orders')<a class="ui-back" href="{{ route('orders') }}">Return to Orders</a>@endmoduleRoute
         </div>
-    </aside>
+    </section>
+    <dialog id="deliveryMapDialog" class="delivery-map-dialog" aria-labelledby="expandedMapTitle">
+        <header class="delivery-dialog-header"><h2 id="expandedMapTitle">Delivery Location</h2><button type="button" class="secondary" id="closeDeliveryMap">Close map</button></header>
+        <div id="expandedMapContent"></div>
+    </dialog>
 </div>
 @endsection
 
@@ -245,6 +261,6 @@
         crossorigin=""
         defer></script>
 
-<script src="{{ asset('js/staff-delivery-map.js') }}" defer></script>
-<script src="{{ asset('js/staff-pos.js') }}" defer></script>
+<script src="{{ asset('js/staff-delivery-map.js') }}?v={{ filemtime(public_path('js/staff-delivery-map.js')) }}" defer></script>
+<script src="{{ asset('js/staff-pos.js') }}?v={{ filemtime(public_path('js/staff-pos.js')) }}" defer></script>
 @endpush

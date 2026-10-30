@@ -6,6 +6,7 @@
 @moduleRoute('staff', 'staff.receipts.print')<a class="button" href="{{ route('staff.receipts.print', $order) }}" target="_blank" rel="noopener">Print Receipt</a>@endmoduleRoute
 @endsection
 @section('content')
+@moduleRoute('staff', 'orders')<x-back-link :fallback="route('orders')" label="Back to Orders" />@endmoduleRoute
 <section class="panel">
     <h2>TMTA POS <span class="badge">{{ $order->status }}</span></h2>
     <dl class="detail-grid">

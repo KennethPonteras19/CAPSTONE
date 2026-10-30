@@ -47,13 +47,14 @@ class StaffDeliveryZoneTest extends AuthenticationTestCase
         ]);
         $payload = [
             'request_key' => (string) Str::uuid(), 'action' => 'checkout', 'type' => 'Delivery',
-            'customer_id' => $customer->id, 'address' => 'Imus, Cavite',
+            'customer_id' => $customer->id, 'address' => 'Unit 12, beside the school, Imus, Cavite',
             'delivery_fee' => 1, 'payment_method' => 'Cash', 'amount_tendered' => 1100,
             'items' => [['product_id' => $product->id, 'quantity' => 2]],
         ];
 
         $this->postJson(route('pos.checkout'), $payload)->assertOk();
         $order = Order::firstOrFail();
+        $this->assertSame($payload['address'], $order->address);
         $this->assertEquals(900, $order->delivery_fee);
         $this->assertEquals(1100, $order->total_amount);
         $this->assertEquals(1100, $order->paid_amount);

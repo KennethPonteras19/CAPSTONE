@@ -1,4 +1,4 @@
-```css
+
 :root {
     --accent: #f4cf55;
     --ink: #211d25;
@@ -185,36 +185,6 @@
     font-size: 12px;
 }
 
-.workspace-kpis {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
-    gap: 16px;
-    margin: 24px 0 28px;
-}
-
-.workspace-kpi {
-    border: 1px solid var(--line);
-    background: white;
-    padding: 22px;
-    border-radius: 14px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.workspace-kpi:first-child {
-    background: #fff2b9;
-    border-color: #f7e5a0;
-}
-
-.workspace-kpi span {
-    font-size: 13px;
-    color: #625d66;
-}
-
-.workspace-kpi strong {
-    font-size: 26px;
-}
 
 .panel {
     background: white;
@@ -240,7 +210,7 @@
 
 .two-columns {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 22px;
 }
 
@@ -487,6 +457,13 @@
     align-self: start;
 }
 
+.pos-customer, .pos-type, .pos-payment { grid-column: 1 / -1; }
+.pos-workspace > .panel { min-width: 0; margin-bottom: 0; }
+.pos-products { align-self: start; }
+.pos-products .catalog-grid { max-height: 560px; overflow-y: auto; padding: 4px; }
+.pos-payment .checkout-actions { max-width: 640px; }
+.line-subtotal { margin: 12px 0 0; font-size: 14px; }
+
 .cart-row {
     padding: 14px 0;
     border-bottom: 1px solid var(--line);
@@ -541,144 +518,12 @@
 }
 
 /* =========================================
-   POS SCROLL FIX
-   Applies only when #posApp is present
-   ========================================= */
-
-@supports selector(body:has(#posApp)) {
-    html:has(#posApp),
-    body:has(#posApp) {
-        height: 100%;
-        overflow: hidden;
-    }
-
-    .workspace-main:has(#posApp) {
-        height: 100vh;
-        min-height: 0;
-        box-sizing: border-box;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        padding-bottom: 20px;
-    }
-
-    .workspace-main:has(#posApp) .workspace-topbar {
-        flex: 0 0 auto;
-    }
-
-    .workspace-main:has(#posApp) .workspace-heading {
-        flex: 0 0 auto;
-        margin-bottom: 20px;
-    }
-
-    .workspace-main:has(#posApp) #posError:not([hidden]) {
-        flex: 0 0 auto;
-    }
-
-    #posApp.pos-workspace {
-        flex: 1 1 0;
-        height: 0;
-        min-height: 0;
-        min-width: 0;
-        grid-template-columns: minmax(0, 1fr) minmax(300px, 34%);
-        gap: 16px;
-        overflow: hidden;
-    }
-
-    /* Left column */
-    #posApp > section {
-        display: flex;
-        flex-direction: column;
-        min-width: 0;
-        min-height: 0;
-        overflow: hidden;
-    }
-
-    #posApp .workspace-toolbar,
-    #posApp #catalogStatus {
-        flex: 0 0 auto;
-    }
-
-    #posApp .workspace-toolbar {
-        margin-bottom: 10px;
-    }
-
-    #posApp #catalogStatus {
-        margin: 8px 0 12px;
-    }
-
-    /* Product list scrolls independently */
-    #posApp #productGrid.catalog-grid {
-        flex: 1 1 0;
-        height: 0;
-        min-height: 0;
-        min-width: 0;
-
-        display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        grid-auto-rows: max-content;
-        align-content: start;
-        align-items: start;
-        gap: 12px;
-
-        overflow-y: auto;
-        overflow-x: hidden;
-        overscroll-behavior: contain;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-    }
-
-    /* Correct selector: actual cards use .catalog-card */
-    #posApp #productGrid .catalog-card {
-        box-sizing: border-box;
-        width: 100%;
-        min-width: 0;
-        min-height: 0;
-        height: auto;
-        align-self: start;
-        overflow: hidden;
-    }
-
-    #posApp #productGrid .catalog-card img,
-    #posApp #productGrid .catalog-product-photo {
-        display: block;
-        max-width: 100%;
-        object-fit: contain;
-    }
-
-    /* Right column: narrower, independently scrollable */
-    #posApp .pos-order {
-        align-self: stretch;
-        width: 100%;
-        height: 100%;
-        min-width: 0;
-        min-height: 0;
-        margin-bottom: 0;
-        box-sizing: border-box;
-
-        overflow-y: auto;
-        overflow-x: hidden;
-        overscroll-behavior: contain;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-    }
-
-    /* Hide scrollbars without disabling scrolling */
-    #posApp #productGrid::-webkit-scrollbar,
-    #posApp .pos-order::-webkit-scrollbar {
-        display: none;
-        width: 0;
-        height: 0;
-    }
-}
-
-/* =========================================
    RESPONSIVE LAYOUT
    ========================================= */
 
 @media (max-width: 1200px) {
     .two-columns {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
     }
 }
 
@@ -743,20 +588,7 @@
         flex-direction: column;
     }
 
-    .workspace-kpis {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 10px;
-    }
-
-    .workspace-kpi {
-        padding: 16px;
-    }
-
-    .workspace-kpi strong {
-        font-size: 22px;
-    }
-
-    .workspace-search {
+.workspace-search {
         width: 100%;
     }
 
@@ -788,7 +620,6 @@
 
     #posApp.pos-workspace {
         grid-template-columns: minmax(0, 1fr);
-        grid-template-rows: minmax(220px, 1fr) minmax(300px, 1fr);
     }
 
     #posApp #productGrid.catalog-grid {
@@ -853,7 +684,7 @@
 }
 
 
-```css
+
 /* =========================================
    INVENTORY TABLE - INDEPENDENT SCROLL
    Hidden scrollbar, scrolling still works
@@ -890,9 +721,8 @@
     z-index: 2;
     background: #f6f5f7;
 }
-```
 
-```css
+
 /* =========================================
    STAFF DASHBOARD - INVENTORY ALERTS
    ========================================= */
@@ -1048,4 +878,3 @@ a.inventory-alert-product:hover {
         justify-self: start;
     }
 }
-```

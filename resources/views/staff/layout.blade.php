@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/staff/staff-dashboard.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/staff/staff-workspace.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/staff/staff-workspace.css') }}?v={{ filemtime(public_path('css/staff/staff-workspace.css')) }}">
     @stack('styles')
     @include('partials.admin-sidebar-assets')
 </head>
@@ -26,7 +26,7 @@
         @yield('content')
     </main>
 </div>
-<script src="{{ asset('js/staff-workspace.js') }}" defer></script>
+<script src="{{ asset('js/staff-workspace.js') }}?v={{ filemtime(public_path('js/staff-workspace.js')) }}" defer></script>
 @stack('scripts')
 </body>
 </html>

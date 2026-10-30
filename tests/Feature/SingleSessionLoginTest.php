@@ -213,6 +213,9 @@ class SingleSessionLoginTest extends TestCase
     {
         $account = $this->createAccount($guard);
         $response = $this->postLogin($endpoint, $this->credentials($account) + ['remember' => '1']);
+        $sessionCookie = $response->getCookie(config('session.cookie'));
+        $this->assertNotNull($sessionCookie);
+        $this->assertSame(0, $sessionCookie->getExpiresTime());
         $dashboard = $response->headers->get('Location');
         $cookieName = Auth::guard($guard)->getRecallerName();
         $cookie = $response->getCookie($cookieName);
@@ -249,6 +252,9 @@ class SingleSessionLoginTest extends TestCase
         $account = $this->createAccount($guard);
         $response = $this->postLogin($endpoint, $this->credentials($account));
         $response->assertCookieMissing(Auth::guard($guard)->getRecallerName());
+        $sessionCookie = $response->getCookie(config('session.cookie'));
+        $this->assertNotNull($sessionCookie);
+        $this->assertSame(0, $sessionCookie->getExpiresTime());
         $dashboard = $response->headers->get('Location');
         $this->switchBrowser();
 

@@ -23,6 +23,9 @@
             <h1>Reports &amp; Forecasting</h1>
             <p class="subtitle">Detailed sales performance and future sales estimates</p>
         </div>
+        <div class="right-section"> 
+                <!-- DATE AND TIME -->
+                <div id="datetime" class="datetime"></div>
         <button type="button" onclick="window.print()" class="print-btn"><i class="fa-solid fa-print" aria-hidden="true"></i> Print report</button>
     </div>
     <form class="filters report-filters" method="GET" action="{{ route('reports') }}">
@@ -53,15 +56,15 @@
             <div><strong>{{ $historyPeriods[$history['period']] }}</strong><span>{{ $history['range'] }}</span></div>
             <p>Generated {{ $report['generated_at'] }} · All amounts in PHP (₱)</p>
         </div>
-        <div class="report-metrics">
-            <article class="card metric-sales"><h2>Total sales</h2><strong>₱{{ number_format($history['total'], 2) }}</strong><p>Booked sales in this period</p></article>
-            <article class="card"><h2>Transactions</h2><strong>{{ number_format($summary['transactions']) }}</strong><p>Orders / receipt groups</p></article>
-            <article class="card"><h2>Units sold</h2><strong>{{ number_format($summary['units']) }}</strong><p>Combined item quantities</p></article>
-            <article class="card"><h2>Average transaction</h2><strong>₱{{ number_format($summary['average_order'], 2) }}</strong><p>Sales divided by transactions</p></article>
-            <article class="card"><h2>Paid toward these sales</h2><strong>₱{{ number_format($summary['paid'], 2) }}</strong><p>Payments recorded as of now</p></article>
-            <article class="card"><h2>Outstanding balance</h2><strong>₱{{ number_format($summary['outstanding'], 2) }}</strong><p>Still unpaid on these sales</p></article>
-            <article class="card"><h2>Daily average</h2><strong>₱{{ number_format($history['daily_average'], 2) }}</strong><p>Includes days with no sales</p></article>
-            <article class="card"><h2>Days with sales</h2><strong>{{ $summary['active_days'] }} <small>/ {{ $summary['days'] }}</small></strong><p>Calendar days in the period</p></article>
+        <div class="ui-metrics">
+            <x-metric label="Total sales" :value="'₱'.number_format($history['total'], 2)" tone="success" icon="fa-peso-sign" hint="Booked sales in this period" />
+            <x-metric label="Transactions" :value="number_format($summary['transactions'])" tone="info" icon="fa-receipt" hint="Orders / receipt groups" />
+            <x-metric label="Units sold" :value="number_format($summary['units'])" tone="info" icon="fa-box" hint="Combined item quantities" />
+            <x-metric label="Average transaction" :value="'₱'.number_format($summary['average_order'], 2)" tone="info" icon="fa-chart-line" hint="Sales divided by transactions" />
+            <x-metric label="Paid toward these sales" :value="'₱'.number_format($summary['paid'], 2)" tone="success" icon="fa-circle-check" hint="Payments recorded as of now" />
+            <x-metric label="Outstanding balance" :value="'₱'.number_format($summary['outstanding'], 2)" tone="warning" icon="fa-clock" hint="Still unpaid on these sales" />
+            <x-metric label="Daily average" :value="'₱'.number_format($history['daily_average'], 2)" tone="info" icon="fa-chart-line" hint="Includes days with no sales" />
+            <x-metric label="Days with sales" :value="$summary['active_days'].' / '.$summary['days']" tone="info" icon="fa-calendar-days" hint="Calendar days in the period" />
         </div>
         <section class="report-section comparison-section" aria-labelledby="comparison-title">
             <div>
@@ -239,6 +242,21 @@
     } else {
         document.getElementById('chart-unavailable').hidden = false;
     }
+    function updateDateTime() {
+    const now = new Date();
+    const date = now.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+    });
+    const time = now.toLocaleTimeString();
+    const element = document.getElementById('datetime');
+
+    if (element) element.textContent = date + ' | ' + time;
+}
+
+setInterval(updateDateTime, 1000);
+updateDateTime();
 </script>
 </body>
 </html>

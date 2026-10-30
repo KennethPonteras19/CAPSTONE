@@ -5,6 +5,7 @@
 @moduleRoute('staff', 'staff.receipts.legacy')<a class="button" href="{{ route('staff.receipts.legacy', ['receipt' => $sales->first()->receipt_no]) }}" target="_blank" rel="noopener">Print Receipt</a>@endmoduleRoute
 @endsection
 @section('content')
+@moduleRoute('staff', 'transactions')<x-back-link :fallback="route('transactions')" label="Back to Payment History" />@endmoduleRoute
 <section class="panel"><h2>TMTA POS</h2><p>{{ $sales->first()->created_at->format('M d, Y h:i A') }} · {{ $sales->first()->staff_name }}</p>
 <div class="table-scroll"><table class="workspace-table"><thead><tr><th>Item</th><th>Quantity</th><th>Total</th><th>Paid</th></tr></thead><tbody>
 @foreach($sales as $sale)<tr><td>{{ $sale->item_name }}</td><td>{{ $sale->qty }}</td><td>₱{{ number_format($sale->total_amount, 2) }}</td><td>₱{{ number_format($sale->paid_amount, 2) }}</td></tr>@endforeach

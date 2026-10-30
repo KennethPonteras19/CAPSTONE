@@ -25,22 +25,10 @@
         </div>
     </header>
 
-    <section class="cards">
-        <article class="card">
-            <div class="label">Email Alerts</div>
-            <div class="value" style="font-size:20px;" id="emailState">Enabled</div>
-            <div class="hint">Receive warnings and system events via email.</div>
-        </article>
-        <article class="card">
-            <div class="label">Auto Backup</div>
-            <div class="value" style="font-size:20px;" id="backupState">Enabled</div>
-            <div class="hint">Nightly database and logs backup protection.</div>
-        </article>
-        <article class="card">
-            <div class="label">Audit Lock</div>
-            <div class="value" style="font-size:20px;" id="auditState">Disabled</div>
-            <div class="hint">Freeze critical settings before audit periods.</div>
-        </article>
+    <section class="ui-metrics">
+        <x-metric label="Email Alerts" value="Enabled" value-id="emailState" icon="fa-gear" hint="Receive warnings and system events via email." />
+        <x-metric label="Auto Backup" value="Enabled" value-id="backupState" icon="fa-gear" hint="Nightly database and logs backup protection." />
+        <x-metric label="Audit Lock" value="Disabled" value-id="auditState" icon="fa-gear" hint="Freeze critical settings before audit periods." />
     </section>
 
     <section class="layout-two">

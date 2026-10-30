@@ -5,14 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Receipt Templates · TMTA</title>
     <link rel="stylesheet" href="{{ asset('css/receipts.css') }}?v={{ filemtime(public_path('css/receipts.css')) }}">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v={{ filemtime(public_path('css/app.css')) }}">
 </head>
 <body class="receipt-library">
 <main class="library">
     <nav class="toolbar">
         @if($prefix === 'sales.receipts')
-            @moduleRoute('admin', 'sales')<a href="{{ route('sales') }}">← Sales</a>@endmoduleRoute
+            @moduleRoute('admin', 'sales')<x-back-link :fallback="route('sales')" label="Back to Sales" />@endmoduleRoute
         @else
-            @moduleRoute('staff', 'pos')<a href="{{ route('pos') }}">← Point of Sale</a>@endmoduleRoute
+            @moduleRoute('staff', 'pos')<x-back-link :fallback="route('pos')" label="Back to Point of Sale" />@endmoduleRoute
             @moduleRoute('staff', 'orders')<a href="{{ route('orders') }}">Orders</a>@endmoduleRoute
             @moduleRoute('staff', 'transactions')<a href="{{ route('transactions') }}">Payment History</a>@endmoduleRoute
         @endif

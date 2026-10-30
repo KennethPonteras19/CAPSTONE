@@ -63,49 +63,24 @@
     </section>
 
     {{-- SALES SUMMARY --}}
-    <section class="stats">
+    <section class="ui-metrics">
 
-        <div class="stat-card">
-            <h4>Orders Today</h4>
-            <p>{{ number_format($todayOrders) }}</p>
-            <small>Distinct receipts created today</small>
-        </div>
+        <x-metric label="Orders Today" :value="number_format($todayOrders)" tone="info" icon="fa-receipt" hint="Distinct receipts created today" />
 
-        <div class="stat-card">
-            <h4>Sales Revenue Today</h4>
-            <p>₱{{ number_format($todayRevenue, 2) }}</p>
-            <small>Total recorded sales value today</small>
-        </div>
+        <x-metric label="Sales Revenue Today" :value="'₱'.number_format($todayRevenue, 2)" tone="success" icon="fa-peso-sign" hint="Total recorded sales value today" />
 
-        <div class="stat-card">
-            <h4>Payments Collected Today</h4>
-            <p>₱{{ number_format($paymentsCollected, 2) }}</p>
-            <small>Payments recorded against today's sales</small>
-        </div>
+        <x-metric label="Payments Collected Today" :value="'₱'.number_format($paymentsCollected, 2)" tone="success" icon="fa-circle-check" hint="Payments recorded against today&#039;s sales" />
 
-        <div class="stat-card">
-            <h4>Outstanding Balance Today</h4>
-            <p>₱{{ number_format($outstandingBalance, 2) }}</p>
-            <small>Remaining balance on today's sales</small>
-        </div>
+        <x-metric label="Outstanding Balance Today" :value="'₱'.number_format($outstandingBalance, 2)" tone="warning" icon="fa-clock" hint="Remaining balance on today&#039;s sales" />
 
     </section>
 
-    <section class="sales-summary-extra">
-        <div>
-            <span>Average Order Value Today</span>
-            <strong>₱{{ number_format($averageOrder, 2) }}</strong>
-        </div>
+    <section class="ui-metrics">
+        <x-metric label="Average Order Value Today" :value="'₱'.number_format($averageOrder, 2)" icon="fa-chart-line" />
 
-        <div>
-            <span>Top Product by Quantity</span>
-            <strong>{{ $topProduct ?: 'No sales yet' }}</strong>
-        </div>
+        <x-metric label="Top Product by Quantity" :value="$topProduct ?: 'No sales yet'" icon="fa-box" />
 
-        <div>
-            <span>Top Staff by Recorded Sales</span>
-            <strong>{{ $topStaff ?: 'No sales yet' }}</strong>
-        </div>
+        <x-metric label="Top Staff by Recorded Sales" :value="$topStaff ?: 'No sales yet'" icon="fa-user" />
     </section>
 
     {{-- TRANSACTIONS --}}

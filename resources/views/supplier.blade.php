@@ -975,24 +975,22 @@
             }
         });
 
-        /* =========================
-           DATE AND TIME
-        ========================= */
-
+        // DIGITAL CLOCK
         function updateDateTime() {
-            const element = document.getElementById('datetime');
+    const now = new Date();
+    const date = now.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+    });
+    const time = now.toLocaleTimeString();
+    const element = document.getElementById('datetime');
 
-            if (element) {
-                const now = new Date();
+    if (element) element.textContent = date + ' | ' + time;
+}
 
-                element.textContent =
-                    now.toLocaleDateString() + ' | ' +
-                    now.toLocaleTimeString();
-            }
-        }
-
-        setInterval(updateDateTime, 1000);
-        updateDateTime();
+setInterval(updateDateTime, 1000);
+updateDateTime();
     </script>
 
 </body>

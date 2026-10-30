@@ -154,41 +154,13 @@
         </div>
 
         <!-- CARDS -->
-        <div class="cards">
-            <div class="card blue">
-                <div class="card-top">
-                    <span>Today Sales</span>
-                    <i class="fa-solid fa-peso-sign"></i>
-                </div>
-                <h2 class="count" data-target="{{ $todaySales }}">0</h2>
-            </div>
-
-            <div class="card green">
-                <div class="card-top">
-                    <span>Transactions</span>
-                    <i class="fa-solid fa-receipt"></i>
-                </div>
-                <h2 class="count" data-target="{{ $transactions }}">0</h2>
-            </div>
-
-            <div class="card orange">
-                <div class="card-top">
-                    <span>Products</span>
-                    <i class="fa-solid fa-box"></i>
-                </div>
-                <h2 class="count" data-target="{{ $products }}">0</h2>
-            </div>
-
-            <div class="card red">
-                <div class="card-top">
-                    <span>Low Stock</span>
-                    <i class="fa-solid fa-triangle-exclamation"></i>
-                </div>
-                <h2 class="count" data-target="{{ $lowStockCount }}">0</h2>
-            </div>
+        <div class="ui-metrics">
+            <x-metric label="Today Sales" :value="'₱'.number_format($todaySales, 2)" tone="success" icon="fa-peso-sign" />
+            <x-metric label="Transactions" :value="number_format($transactions)" tone="info" icon="fa-receipt" />
+            <x-metric label="Products" :value="number_format($products)" tone="info" icon="fa-box" />
+            <x-metric label="Low Stock" :value="number_format($lowStockCount)" tone="warning" icon="fa-triangle-exclamation" />
         </div>
-
-        <!-- GRID -->
+<!-- GRID -->
         <div class="dashboard-grid">
             <!-- CHART -->
             <section class="card large forecasting" id="forecasting" aria-labelledby="forecasting-title">
@@ -225,10 +197,10 @@
                     <div class="forecast-panel">
                         <h4>Actual sales · {{ $historyPeriods[$forecasting['history']['period']] }}</h4>
                         <p class="forecast-note">{{ $forecasting['history']['range'] }}</p>
-                        <div class="forecast-metrics">
-                            <div><span>Total sales</span><strong>₱{{ number_format($forecasting['history']['total'], 2) }}</strong></div>
-                            <div><span>Daily average</span><strong>₱{{ number_format($forecasting['history']['daily_average'], 2) }}</strong></div>
-                        </div>
+                        <div class="ui-metrics">
+                            <x-metric label="Total sales" :value="'₱'.number_format($forecasting['history']['total'], 2)" icon="fa-chart-line" />
+                            <x-metric label="Daily average" :value="'₱'.number_format($forecasting['history']['daily_average'], 2)" icon="fa-chart-line" />
+        </div>
                         @unless($forecasting['history']['has_sales'])
                             <p class="forecast-empty">No sales recorded in this period.</p>
                         @endunless
@@ -238,10 +210,10 @@
                     <div class="forecast-panel forecast-panel-future">
                         <h4>Predicted sales · {{ $forecastPeriods[$forecasting['forecast']['period']] }}</h4>
                         <p class="forecast-note">{{ $forecasting['forecast']['range'] }}</p>
-                        <div class="forecast-metrics">
-                            <div><span>Estimated total</span><strong>{{ $forecasting['forecast']['available'] ? '₱'.number_format($forecasting['forecast']['total'], 2) : '—' }}</strong></div>
-                            <div><span>Estimated daily average</span><strong>{{ $forecasting['forecast']['available'] ? '₱'.number_format($forecasting['forecast']['daily_average'], 2) : '—' }}</strong></div>
-                        </div>
+                        <div class="ui-metrics">
+                            <x-metric label="Estimated total" :value="$forecasting['forecast']['available'] ? '₱'.number_format($forecasting['forecast']['total'], 2) : '—'" icon="fa-chart-line" />
+                            <x-metric label="Estimated daily average" :value="$forecasting['forecast']['available'] ? '₱'.number_format($forecasting['forecast']['daily_average'], 2) : '—'" icon="fa-chart-line" />
+        </div>
                         @if($forecasting['forecast']['available'])
                             <div class="forecast-chart"><canvas id="forecastChart" role="img" aria-label="Estimated daily sales chart for {{ $forecasting['forecast']['range'] }}"></canvas></div>
                         @else
@@ -344,31 +316,20 @@
     <script>
         // DIGITAL CLOCK
         function updateDateTime() {
-            const datetimeEl = document.getElementById('datetime');
-            if (datetimeEl) {
-                const now = new Date();
-                datetimeEl.innerHTML = now.toLocaleDateString() + " | " + now.toLocaleTimeString();
-            }
-        }
-        setInterval(updateDateTime, 1000);
-        updateDateTime();
+    const now = new Date();
+    const date = now.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+    });
+    const time = now.toLocaleTimeString();
+    const element = document.getElementById('datetime');
 
-        // ANIMATED COUNTERS
-        document.querySelectorAll('.count').forEach(counter => {
-            let update = () => {
-                let target = +counter.getAttribute('data-target');
-                let current = +counter.innerText;
-                let inc = target / 100;
+    if (element) element.textContent = date + ' | ' + time;
+}
 
-                if (current < target) {
-                    counter.innerText = Math.ceil(current + inc);
-                    setTimeout(update, 20);
-                } else {
-                    counter.innerText = target;
-                }
-            };
-            update();
-        });
+setInterval(updateDateTime, 1000);
+updateDateTime();
 
         // CHART INTEGRATION
         document.addEventListener("DOMContentLoaded", function () {

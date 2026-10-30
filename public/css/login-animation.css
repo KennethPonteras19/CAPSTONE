@@ -38,7 +38,8 @@ button, a, summary, input { -webkit-tap-highlight-color: transparent; }
 .login-brand { position: absolute; z-index: 1; inset: 0 0 0 48%; overflow: hidden; clip-path: polygon(24% 0, 100% 0, 100% 100%, 0 100%); background: #324574; }
 .brand-art { position: absolute; inset: -25px; background: radial-gradient(ellipse at 48% 15%, #ff715f 0, #ff715fe6 15%, transparent 44%), radial-gradient(ellipse at 50% 85%, #276de2 0, #235abb 32%, transparent 60%), radial-gradient(ellipse at 100% 72%, #cebe6f 0, transparent 40%), #34416c; }
 .brand-art img { position: absolute; width: 100%; max-width: none; top: 14%; left: 5%; opacity: .7; filter: blur(16px) saturate(1.5); transform: scale(1.04); }
-.brand-copy { position: absolute; left: 32%; right: 10%; bottom: 15%; color: #fffaf0; }
+.brand-copy { position: absolute; z-index: 1; left: 32%; right: 10%; bottom: 10%; color: #fffaf0; }
+.brand-logo { display: block; width: min(150px, 100%); height: auto; object-fit: contain; margin: 0 0 20px; }
 .brand-eyebrow { font-size: 13px; font-weight: 700; letter-spacing: 4px; margin: 0 0 18px; }
 .brand-copy h2 { font: bold 42px/1.2 Georgia, serif; margin: 0 0 20px; }
 .brand-copy h2 em { display: inline-block; color: #f9df78; font-weight: normal; font-size: 48px; }

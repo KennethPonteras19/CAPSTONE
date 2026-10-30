@@ -334,6 +334,56 @@ body {
     font-size: 13px;
 }
 
+/* Topbar layout */
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    margin-bottom: 24px;
+}
+
+.topbar h1 {
+    margin: 0;
+    line-height: 1.2;
+}
+
+/* Date and clock + Admin badge */
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.datetime {
+    background: #ffffff;
+    color: #0b1f3a;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    padding: 11px 15px;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.admin-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #e2e8f0;
+    color: #0b1f3a;
+    border-radius: 20px;
+    padding: 9px 15px;
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+
+
 
 /* =========================================================
    RESPONSIVE

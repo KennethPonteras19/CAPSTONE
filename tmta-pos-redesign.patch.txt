@@ -1,0 +1,615 @@
+diff --git a/app/Http/Controllers/StaffWorkspaceController.php b/app/Http/Controllers/StaffWorkspaceController.php
+index 1b26425..fa5c5f2 100644
+--- a/app/Http/Controllers/StaffWorkspaceController.php
++++ b/app/Http/Controllers/StaffWorkspaceController.php
+@@ -19,7 +19,7 @@ public function pos(Request $request)
+         abort_if($draft && ! $draft->isDraft(), 409, 'Only held orders and quotations can be resumed.');
+ 
+         return view('staff.pos', [
+-            'products' => Product::orderBy('name')->get(['id', 'name', 'category', 'price', 'stock', 'image_path']),
++            'products' => Product::orderBy('name')->get(['id', 'name', 'category', 'price', 'stock', 'stock_unit', 'image_path']),
+             'customers' => Customer::where('is_active', true)->orderBy('name')->get(['id', 'name', 'phone', 'address']),
+             'draft' => $draft,
+         ]);
+@@ -27,7 +27,7 @@ public function pos(Request $request)
+ 
+     public function catalog()
+     {
+-        return response()->json(Product::orderBy('name')->get(['id', 'name', 'category', 'price', 'stock', 'image_path']))->header('Cache-Control', 'no-store');
++        return response()->json(Product::orderBy('name')->get(['id', 'name', 'category', 'price', 'stock', 'stock_unit', 'image_path']))->header('Cache-Control', 'no-store');
+     }
+ 
+     public function checkout(Request $request, StaffOrderService $service)
+diff --git a/public/css/staff/pos-workflow.css b/public/css/staff/pos-workflow.css
+new file mode 100644
+index 0000000..01065d2
+--- /dev/null
++++ b/public/css/staff/pos-workflow.css
+@@ -0,0 +1,72 @@
++/* POS-only overrides: the shared workspace stylesheet also serves other modules. */
++.workspace-main:has(#posApp) { height: 100dvh; min-height: 0; display: flex; flex-direction: column; overflow: hidden; }
++.workspace-main:has(#posApp) .workspace-heading { flex-shrink: 0; margin-bottom: 16px; }
++.workspace-main:has(#posApp) #posError { flex-shrink: 0; max-height: 90px; overflow: auto; }
++#posApp.pos-workspace { --accent: #f4cf55; --ink: #211d25; --muted: #726d78; --line: #e7e4e9; display: flex; flex-direction: column; flex: 1 1 0; height: 0; min-height: 0; gap: 14px; overflow: hidden; }
++#posApp [hidden] { display: none !important; }
++#posApp .pos-tabs { display: flex; flex: 0 0 auto; gap: 6px; padding: 6px; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
++#posApp .pos-tabs button { flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 8px; background: transparent; color: var(--muted); border: 1px solid transparent; font-size: 13px; }
++#posApp .pos-tabs [aria-selected="true"] { background: #fff7db; border-color: var(--accent); color: var(--ink); }
++#posApp .step-number { display: inline-grid; place-items: center; width: 24px; height: 24px; border: 1px solid currentColor; border-radius: 50%; flex-shrink: 0; font-size: 12px; }
++#posApp .step-check { font-weight: 700; }
++#posApp .pos-stage { flex: 1; display: grid; grid-template-columns: minmax(0, 1fr) 270px; gap: 16px; min-height: 0; }
++#posApp .pos-panels, #posApp .pos-step { min-width: 0; min-height: 0; height: 100%; }
++#posApp .pos-step { display: flex; flex-direction: column; gap: 12px; overflow: hidden; }
++#posApp .pos-order-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(230px, 36%); gap: 14px; flex: 1; min-height: 0; }
++#posApp .pos-catalog, #posApp .pos-cart { display: flex; flex-direction: column; min-height: 0; min-width: 0; overflow: hidden; }
++#posApp .pos-cart { margin: 0; padding: 16px; }
++#posApp .pos-cart > button { flex-shrink: 0; margin-top: 12px; }
++#posApp .pos-scroll { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; scrollbar-width: none; overscroll-behavior: contain; }
++#posApp .pos-scroll.panel { margin: 0; padding: 20px; }
++#posApp .pos-scroll::-webkit-scrollbar, #posApp .pos-summary::-webkit-scrollbar { display: none; }
++#posApp #productGrid.catalog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); grid-auto-rows: max-content; align-content: start; flex: 1; height: 0; min-height: 0; overflow-y: auto; scrollbar-width: none; gap: 10px; }
++#posApp #productGrid::-webkit-scrollbar { display: none; }
++#posApp .workspace-toolbar { display: flex; flex-wrap: wrap; gap: 8px; }
++#posApp .workspace-toolbar input { flex: 1 1 160px; width: 0; }
++#posApp .workspace-toolbar select { flex: 1 1 120px; width: 0; }
++#posApp .pos-step-actions { display: flex; flex: 0 0 auto; flex-wrap: wrap; justify-content: space-between; gap: 8px; padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: #fff; }
++#posApp .pos-step-actions > :last-child { margin-left: auto; }
++#posApp .pos-summary { min-height: 0; min-width: 0; margin: 0; padding: 18px; overflow-y: auto; scrollbar-width: none; }
++#posApp .pos-summary > p { overflow-wrap: anywhere; }
++#posApp .summary-list { margin: 14px 0; }
++#posApp .checkout-actions { display: grid; grid-template-columns: 1fr; gap: 8px; }
++#posApp .checkout-item { padding: 8px 0; margin: 0; border-bottom: 1px solid var(--line); }
++#posApp .summary-products { margin: 12px 0; }
++#posApp .summary-products > div { max-height: 150px; overflow: auto; scrollbar-width: none; font-size: 12px; }
++#posApp .form-grid { gap: 14px; }
++#posApp input[readonly] { background: #f6f5f7; }
++#posApp [aria-invalid="true"] { border-color: #9f2626; outline-color: #9f2626; }
++#posApp .delivery-location { border-top: 1px solid var(--line); padding-top: 14px; }
++#posApp #deliveryMap { height: clamp(240px, 38vh, 400px); }
++#posApp .cart-row-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
++@media (max-width: 1100px) {
++    #posApp .pos-stage { grid-template-columns: minmax(0, 1fr) 230px; gap: 10px; }
++    #posApp .pos-order-grid { grid-template-columns: minmax(0, 1fr) 230px; gap: 10px; }
++}
++@media (max-width: 900px) {
++    #posApp .pos-stage { display: flex; flex-direction: column; }
++    #posApp .pos-panels { flex: 1; height: 0; }
++    #posApp .pos-summary { flex: 0 0 auto; max-height: 150px; padding: 10px 14px; }
++    #posApp .pos-summary h2 { font-size: 14px; margin: 0 0 6px; }
++    #posApp .pos-summary > p { display: inline; margin-right: 10px; }
++    #posApp .pos-summary .summary-list { display: inline-flex; flex-wrap: wrap; gap: 8px 14px; margin: 6px 12px 6px 0; }
++    #posApp .pos-summary .summary-list > div { gap: 8px; }
++    #posApp .pos-summary .checkout-actions { display: flex; flex-wrap: wrap; }
++    #posApp .pos-summary .checkout-actions button { padding: 6px 10px; font-size: 12px; }
++}
++@media (max-width: 600px) {
++    #posApp .pos-tabs { gap: 2px; padding: 3px; }
++    #posApp .pos-tabs button { flex-direction: column; gap: 4px; font-size: 11px; padding: 8px 4px; }
++    #posApp .step-check { display: none; }
++    #posApp .pos-tabs button:has(.step-check:not([hidden])) .step-number { background: var(--accent); }
++    #posApp .pos-order-grid { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(120px, 1fr) minmax(120px, 1fr); }
++    #posApp #productGrid.catalog-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
++    #posApp .pos-step-actions { padding: 8px; }
++    #posApp .pos-step-actions button { font-size: 12px; padding: 9px; }
++    #posApp .pos-scroll.panel { padding: 14px; }
++}
++@media (max-height: 650px) {
++    html:has(#posApp), body:has(#posApp) { height: auto; overflow: auto; }
++    .workspace-main:has(#posApp) { height: auto; min-height: 100dvh; overflow: visible; }
++    #posApp.pos-workspace { flex: none; height: 650px; }
++}
+diff --git a/public/js/staff-delivery-map.js b/public/js/staff-delivery-map.js
+index 442f837..10b9d39 100644
+--- a/public/js/staff-delivery-map.js
++++ b/public/js/staff-delivery-map.js
+@@ -21,6 +21,7 @@ window.createStaffDeliveryMap = function ({ onChange, onBusyChange, onZoneChange
+     if (!container || !address || !status || !overlay) {
+         console.error('Delivery map HTML elements are missing.');
+         return {
++            resize() {},
+             setEnabled() {},
+             reset() {},
+             getSelectedZone() { return null; },
+@@ -505,6 +506,9 @@ window.createStaffDeliveryMap = function ({ onChange, onBusyChange, onZoneChange
+     });
+ 
+     return {
++        resize() {
++            requestAnimationFrame(() => map?.invalidateSize());
++        },
+         setEnabled(value) {
+             const wasEnabled = enabled;
+             enabled = Boolean(value);
+diff --git a/public/js/staff-pos.js b/public/js/staff-pos.js
+index 8e2da27..7e62713 100644
+--- a/public/js/staff-pos.js
++++ b/public/js/staff-pos.js
+@@ -8,20 +8,118 @@
+     let changed = false;
+     let leaving = false;
+     let locatingAddress = false;
++    let activeStep = 0;
++    const panels = [...app.querySelectorAll('[role="tabpanel"]')];
++    const tabs = [...app.querySelectorAll('[role="tab"]')];
+     const byId = id => document.getElementById(id);
+     const money = cents => new Intl.NumberFormat('en-PH', {style: 'currency', currency: 'PHP'}).format(cents / 100);
+     const cents = value => Math.round((Number(value) || 0) * 100);
+     const productFor = item => products.find(product => product.id === item.product_id);
+     const errorBox = byId('posError');
+-    const showError = message => { errorBox.textContent = message; errorBox.hidden = !message; if (message) errorBox.scrollIntoView({block: 'nearest'}); };
++    const showError = message => {
++        errorBox.textContent = message;
++        errorBox.hidden = !message;
++        if (message) errorBox.scrollIntoView({block: 'nearest'});
++        else app.querySelectorAll('[aria-invalid="true"]').forEach(control => {
++            control.removeAttribute('aria-invalid');
++            control.removeAttribute('aria-errormessage');
++        });
++    };
+     const element = (tag, text, className) => { const node = document.createElement(tag); if (text !== undefined) node.textContent = text; if (className) node.className = className; return node; };
++    function displayStep(step, focus = true) {
++        activeStep = step;
++        panels.forEach((panel, index) => { panel.hidden = index !== step; });
++        tabs.forEach((tab, index) => {
++            tab.setAttribute('aria-selected', String(index === step));
++            tab.tabIndex = index === step ? 0 : -1;
++        });
++        if (step === 1) deliveryMap.resize();
++        if (focus) tabs[step].focus();
++    }
++
++    function invalid(control, message) {
++        const panel = control?.closest('[role="tabpanel"]');
++        if (panel) displayStep(panels.indexOf(panel), false);
++        showError(message);
++        if (control) {
++            control.setAttribute('aria-invalid', 'true');
++            control.setAttribute('aria-errormessage', 'posError');
++            control.focus();
++        }
++        return false;
++    }
++
++    function validFields(scope) {
++        for (const input of scope.querySelectorAll('input, textarea, select')) {
++            if (!input.disabled && !input.checkValidity()) return invalid(input, input.validationMessage);
++        }
++        return true;
++    }
++
++    function validateOrder(stock = true) {
++        if (!cart.length) return invalid(byId('productSearch'), 'Select at least one product to continue.');
++        if (!validFields(panels[0])) return false;
++        for (const item of cart) {
++            const product = productFor(item);
++            if (!product) return invalid(byId('cartItems'), 'Remove unavailable products from the order.');
++            if (stock && item.quantity > product.stock) return invalid(byId('cartItems'), `${product.name}: only ${product.stock} available. Adjust the quantity.`);
++        }
++        return true;
++    }
++
++    function validateCustomer() {
++        if (!validFields(panels[1])) return false;
++        if (byId('orderType').value !== 'Delivery') return true;
++        if (!byId('customerId').value) return invalid(byId('customerId'), 'Select a saved customer for delivery.');
++        if (!byId('deliveryAddress').value.trim()) return invalid(byId('deliveryAddress'), 'Enter a delivery address or select a location on the map.');
++        if (locatingAddress) return invalid(byId('deliveryAddress'), 'Wait for the delivery zone lookup to finish.');
++        if (!deliveryMap.getSelectedZone()) return invalid(byId('deliveryAddress'), 'Check the delivery address: a supported delivery zone is required.');
++        return true;
++    }
++
++    function validatePayment() {
++        if (!validFields(panels[2])) return false;
++        const method = byId('paymentMethod').value;
++        const total = totals().total;
++        const received = method === 'Charge' ? 0 : cents(byId('amountTendered').value);
++        if (['Online', 'Cheque'].includes(method) && !byId('paymentReference').value.trim()) return invalid(byId('paymentReference'), 'Enter the payment reference.');
++        if (method === 'Charge' && !byId('customerId').value) return invalid(byId('customerId'), 'Select a customer for a Charge order.');
++        if (method !== 'Charge' && total > 0 && received <= 0) return invalid(byId('amountTendered'), 'Enter the amount received, or select Charge for an unpaid order.');
++        if (method !== 'Cash' && received > total) return invalid(byId('amountTendered'), 'Only cash payments can include change.');
++        if (received < total && !byId('customerId').value) return invalid(byId('customerId'), 'Select a customer for an outstanding balance.');
++        return true;
++    }
++
++    function goToStep(step) {
++        if (saving) return;
++        if (step > activeStep && (!validateOrder() || (step === 2 && !validateCustomer()))) return;
++        showError('');
++        displayStep(step);
++    }
++
++    function updateProgress() {
++        const customer = byId('customerId').value;
++        tabs[0].querySelector('.step-check').hidden = !cart.length || cart.some(item => !productFor(item) || item.quantity > productFor(item).stock) || ![...panels[0].querySelectorAll('input')].every(input => input.checkValidity());
++        tabs[1].querySelector('.step-check').hidden = !cart.length || (byId('orderType').value === 'Delivery' && (!customer || !byId('deliveryAddress').value.trim() || locatingAddress || !deliveryMap.getSelectedZone()));
++    }
++
++    app.querySelectorAll('[data-step]').forEach(button => button.addEventListener('click', () => goToStep(Number(button.dataset.step))));
++    tabs.forEach((tab, index) => tab.addEventListener('keydown', event => {
++        const step = {ArrowRight: (index + 1) % 3, ArrowLeft: (index + 2) % 3, Home: 0, End: 2}[event.key];
++        if (step !== undefined) { event.preventDefault(); goToStep(step); }
++    }));
++    app.addEventListener('input', event => {
++        changed = true;
++        event.target.removeAttribute('aria-invalid');
++        event.target.removeAttribute('aria-errormessage');
++    });
+     const deliveryMap = window.createStaffDeliveryMap({
+         onChange: () => { changed = true; },
+         onZoneChange: zone => {
+             byId('deliveryFee').value = zone ? Number(zone.fee).toFixed(2) : '0.00';
+             updateTotals();
+         },
+-        onBusyChange: busy => { locatingAddress = busy; updateSaveButtons(); },
++        onBusyChange: busy => { locatingAddress = busy; updateSaveButtons(); updateProgress(); },
+     });
+ 
+     function updateSaveButtons() {
+@@ -50,7 +148,7 @@
+                 picture.replaceChildren(photo);
+             }
+             card.append(picture, element('strong', product.name), element('small', product.category),
+-                element('span', money(cents(product.price)), 'price'), element('small', product.stock > 0 ? `${product.stock} available` : 'Out of stock'));
++                element('span', money(cents(product.price)), 'price'), element('small', product.stock > 0 ? `${product.stock} ${product.stock_unit || 'units'} available` : 'Out of stock'));
+             card.addEventListener('click', () => {
+                 const existing = cart.find(item => item.product_id === product.id);
+                 if (existing && existing.quantity >= product.stock) { showError(`Only ${product.stock} ${product.name} available.`); return; }
+@@ -82,7 +180,7 @@
+                 const wrapper = element('label', label);
+                 const input = document.createElement('input');
+                 Object.assign(input, {type: 'number', min, max, step, value: item[key], required: true});
+-                input.addEventListener('change', () => { if (!input.reportValidity()) return; item[key] = Number(input.value); changed = true; updateTotals(); });
++                input.addEventListener('input', () => { if (!input.checkValidity()) return; item[key] = Number(input.value); changed = true; updateTotals(); });
+                 wrapper.append(input); fields.append(wrapper);
+             });
+             row.append(header, element('p', product ? `${money(cents(product.price))} each · ${product.stock} available` : 'Remove this item to continue.', 'sync-note'), fields);
+@@ -111,7 +209,18 @@
+         byId('grandTotal').textContent = money(values.total);
+         byId('changeDue').textContent = money(isCash ? Math.max(0, tendered - values.total) : 0);
+         byId('balanceDue').textContent = money(Math.max(0, values.total - tendered));
++        byId('summaryDeliveryFee').textContent = money(byId('orderType').value === 'Delivery' ? cents(byId('deliveryFee').value) : 0);
++        const customer = data.customers.find(customer => customer.id === Number(byId('customerId').value));
++        byId('customerName').value = customer?.name || 'Walk-in customer';
++        byId('customerPhone').value = customer?.phone || '';
++        byId('summaryCustomer').textContent = customer?.name || 'Walk-in customer';
++        byId('summaryOrderType').textContent = byId('orderType').value;
++        byId('summaryPayment').textContent = `${byId('paymentMethod').value} · Balance ${money(Math.max(0, values.total - tendered))} · Change ${money(isCash ? Math.max(0, tendered - values.total) : 0)}`;
++        byId('checkoutItems').replaceChildren(...cart.map(item => element('p', `${item.quantity} × ${productFor(item)?.name || item.name}`, 'checkout-item')));
++        byId('summaryItems').replaceChildren(...cart.map(item => element('p', `${item.quantity} × ${productFor(item)?.name || item.name}`, 'checkout-item')));
++        updateProgress();
+         const delivery = byId('orderType').value === 'Delivery';
++        byId('deliveryDetails').hidden = !delivery;
+         byId('deliveryFee').disabled = !delivery || saving;
+         byId('deliveryAddress').disabled = !delivery || saving;
+         deliveryMap.setEnabled(delivery && !saving);
+@@ -144,16 +253,10 @@
+ 
+     async function save(action) {
+         if (saving || !cart.length) return;
+-        if (byId('orderType').value === 'Delivery' && locatingAddress) { showError('Wait for the delivery address to finish loading.'); return; }
+-        if (action === 'checkout' && byId('orderType').value === 'Delivery' && !byId('deliveryAddress').value.trim()) {
+-            showError('Pin a delivery location or enter the full delivery address before completing the order.');
+-            byId('deliveryAddress').focus();
+-            return;
+-        }
+-        for (const input of app.querySelectorAll('input, textarea')) {
+-            if (!input.disabled && !input.reportValidity()) return;
+-        }
+-        if (cart.some(item => !productFor(item))) { showError('Remove unavailable products from the order.'); return; }
++        if (!validateOrder(action === 'checkout')) return;
++        if (action === 'checkout' && (!validateCustomer() || !validatePayment())) return;
++        if (action !== 'checkout' && !validFields(app)) return;
++        if (byId('orderType').value === 'Delivery' && locatingAddress) { invalid(byId('deliveryAddress'), 'Wait for the delivery address lookup to finish.'); return; }
+         const payload = {
+             request_key: app.dataset.key, order_id: data.draft?.id, version: data.draft?.version,
+             action, type: byId('orderType').value, customer_id: byId('customerId').value || null,
+@@ -192,6 +295,7 @@
+         byId('deliveryAddress').value = customer?.address || '';
+         deliveryMap.reset();
+         changed = true;
++        updateTotals();
+     });
+     byId('clearCart').addEventListener('click', () => { if (window.confirm('Clear the current cart? Saved orders will remain in Orders.')) { cart = []; changed = false; renderCart(); showError(''); } });
+     document.querySelectorAll('[data-save]').forEach(button => button.addEventListener('click', () => save(button.dataset.save)));
+diff --git a/resources/views/staff/pos.blade.php b/resources/views/staff/pos.blade.php
+index 1bc9246..bc51304 100644
+--- a/resources/views/staff/pos.blade.php
++++ b/resources/views/staff/pos.blade.php
+@@ -14,6 +14,7 @@
+ @push('styles')
+ <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+ <link rel="stylesheet" href="{{ asset('css/staff/delivery-map.css') }}">
++<link rel="stylesheet" href="{{ asset('css/staff/pos-workflow.css') }}">
+ @endpush
+ 
+ @section('content')
+@@ -25,8 +26,16 @@
+      data-catalog="{{ route('staff.catalog') }}"
+      data-key="{{ (string) \Illuminate\Support\Str::uuid() }}">
+ 
+-    <section>
+-        <div class="workspace-toolbar">
++    <nav class="pos-tabs" role="tablist" aria-label="Transaction steps">
++        <button type="button" id="tab-order" role="tab" aria-selected="true" aria-controls="step-order" data-step="0"><span class="step-number">1</span> Order Details<span class="step-check" hidden aria-label="Completed">✓</span></button>
++        <button type="button" id="tab-customer" role="tab" aria-selected="false" aria-controls="step-customer" tabindex="-1" data-step="1"><span class="step-number">2</span> Customer &amp; Delivery Details<span class="step-check" hidden aria-label="Completed">✓</span></button>
++        <button type="button" id="tab-payment" role="tab" aria-selected="false" aria-controls="step-payment" tabindex="-1" data-step="2"><span class="step-number">3</span> Payment &amp; Checkout</button>
++    </nav>
++    <div class="pos-stage">
++        <div class="pos-panels">
++            <section id="step-order" class="pos-step" role="tabpanel" aria-labelledby="tab-order">
++                <div class="pos-order-grid">
++                    <section class="pos-catalog" aria-label="Product catalog">        <div class="workspace-toolbar">
+             <input id="productSearch" placeholder="Search product…" aria-label="Search catalog">
+ 
+             <select id="categoryFilter" aria-label="Category">
+@@ -40,17 +49,18 @@
+         </div>
+ 
+         <p class="sync-note" id="catalogStatus">Catalog refreshes every 30 seconds.</p>
+-        <div class="catalog-grid" id="productGrid"></div>
++        <div class="catalog-grid" id="productGrid" tabindex="0" aria-label="Products"></div>
+ 
+         <noscript>
+             <p class="notice error">Enable JavaScript to use Point of Sale.</p>
+         </noscript>
+-    </section>
+-
+-    <aside class="panel pos-order">
+-        <h2>Current Order</h2>
+-
+-        <div class="form-grid">
++</section>
++                    <section class="panel pos-cart"><h2>Current Order</h2><div id="cartItems" class="pos-scroll" tabindex="0" aria-label="Cart items"></div><button type="button" class="danger" id="clearCart">Clear Cart</button></section>
++                </div>
++                <footer class="pos-step-actions"><button type="button" class="primary" data-step="1">Continue to Customer Details</button></footer>
++            </section>
++            <section id="step-customer" class="pos-step" role="tabpanel" aria-labelledby="tab-customer" hidden>
++                <div class="panel pos-scroll" tabindex="0" aria-label="Customer and delivery information"><h2>Customer &amp; Delivery Details</h2>        <div class="form-grid">
+ 
+             <label for="customerId">Customer
+                 <select id="customerId">
+@@ -61,7 +71,9 @@
+                 </select>
+             </label>
+ 
+-            <!-- RESTORED ORDER TYPE -->
++            <label>Customer name<input id="customerName" value="Walk-in customer" readonly></label>
++            <label>Contact number<input id="customerPhone" value="" readonly placeholder="No saved contact number"></label>
++            <p class="sync-note full">Name and contact number use the selected customer's saved details.</p>
+             <label class="full" for="orderType">Order Type
+                 <select id="orderType" name="type" required>
+                     <option value="Walk-in" @selected(($draft?->type ?? 'Walk-in') === 'Walk-in')>Walk-in</option>
+@@ -71,7 +83,18 @@
+             </label>
+ 
+             <!-- DELIVERY LOCATION -->
+-            <div class="full delivery-location">
++            <div class="full delivery-location" id="deliveryDetails" hidden>
++        <label for="deliveryFee">Delivery Fee
++            <input
++                id="deliveryFee"
++                type="number"
++                min="0"
++                max="1000000"
++                step="0.01"
++                value="{{ $draft?->delivery_fee ?? 0 }}"
++                readonly
++            >
++        </label>
+                 <span id="deliveryMapLabel" class="delivery-map-label">Delivery Location</span>
+ 
+                 <p class="delivery-map-help" id="deliveryMapHelp">
+@@ -161,34 +184,12 @@ class="delivery-search-results"
+             </div>
+         </div>
+ 
+-        <div id="cartItems"></div>
+-
+-        <div class="summary-list">
+-            <div><span>Items</span><strong id="itemCount">0</strong></div>
+-            <div><span>Subtotal</span><strong id="subtotal">₱0.00</strong></div>
+-            <div><span>Discount</span><strong id="discountTotal">₱0.00</strong></div>
+-        </div>
+-
+-        <label for="deliveryFee">Delivery Fee
+-            <input
+-                id="deliveryFee"
+-                type="number"
+-                min="0"
+-                max="1000000"
+-                step="0.01"
+-                value="{{ $draft?->delivery_fee ?? 0 }}"
+-                readonly
+-            >
+-        </label>
+-
+-        <div class="summary-list">
+-            <div class="grand-total">
+-                <span>Total</span>
+-                <strong id="grandTotal">₱0.00</strong>
+-            </div>
+-        </div>
+-
+-        <div class="form-grid">
++</div>
++                <footer class="pos-step-actions"><button type="button" class="secondary" data-step="0">Back to Order Details</button><button type="button" class="primary" data-step="2">Continue to Payment</button></footer>
++            </section>
++            <section id="step-payment" class="pos-step" role="tabpanel" aria-labelledby="tab-payment" hidden>
++                <div class="panel pos-scroll" tabindex="0" aria-label="Payment information"><h2>Payment &amp; Checkout</h2>
++                    <h3>Selected products</h3><div id="checkoutItems"></div>        <div class="form-grid">
+             <label for="paymentMethod">Payment Method
+                 <select id="paymentMethod">
+                     <option>Cash</option>
+@@ -221,13 +222,39 @@ class="delivery-search-results"
+             Held orders and quotations do not reserve stock.
+         </p>
+ 
+-        <div class="checkout-actions">
+-            <button type="button" class="primary" data-save="checkout">Complete Order</button>
++
++                </div>
++                <footer class="pos-step-actions"><button type="button" class="secondary" data-step="1">Back to Customer Details</button><button type="button" class="primary" data-save="checkout">Complete Transaction</button></footer>
++            </section>
++        </div>
++        <aside class="panel pos-summary" aria-label="Order summary">
++            <h2>Order Summary</h2>
++            <p id="summaryCustomer">Walk-in customer</p><p class="sync-note" id="summaryOrderType">Walk-in</p>
++            <details class="summary-products"><summary>Selected products</summary><div id="summaryItems" tabindex="0" aria-label="Selected products"></div></details>
++                    <div class="summary-list">
++            <div><span>Items</span><strong id="itemCount">0</strong></div>
++            <div><span>Subtotal</span><strong id="subtotal">₱0.00</strong></div>
++            <div><span>Discount</span><strong id="discountTotal">₱0.00</strong></div>
++        </div>
++
++<div class="summary-list"><div><span>Delivery fee</span><strong id="summaryDeliveryFee">₱0.00</strong></div></div>
++
++        <div class="summary-list">
++            <div class="grand-total">
++                <span>Total</span>
++                <strong id="grandTotal">₱0.00</strong>
++            </div>
++        </div>
++
++
++            <p class="sync-note" id="summaryPayment"></p>
++                    <div class="checkout-actions">
+             <button type="button" class="secondary" data-save="hold">Hold Order</button>
+             <button type="button" class="secondary" data-save="quote">Save Quotation</button>
+-            <button type="button" class="danger" id="clearCart">Clear Cart</button>
+         </div>
+-    </aside>
++
++        </aside>
++    </div>
+ </div>
+ @endsection
+ 
+diff --git a/tests/Browser/pos-workflow.cjs b/tests/Browser/pos-workflow.cjs
+new file mode 100644
+index 0000000..51f43ea
+--- /dev/null
++++ b/tests/Browser/pos-workflow.cjs
+@@ -0,0 +1,123 @@
++// Browser regression checks using the real POS markup, scripts and styles.
++// Network/Leaflet fixtures isolate UI behavior; this does not replace Laravel tests.
++// Run: node tests/Browser/pos-workflow.cjs (Chrome installed, or CHROME_PATH set).
++const fs = require('node:fs');
++const path = require('node:path');
++const os = require('node:os');
++const http = require('node:http');
++const {spawn} = require('node:child_process');
++const root = path.resolve(__dirname, '../..');
++const read = name => fs.readFileSync(path.join(root, name), 'utf8');
++let markup = read('resources/views/staff/pos.blade.php').split("@section('content')")[1].split('@endsection')[0];
++markup = markup.replace(/@foreach\(\$products[^\n]*\n[\s\S]*?@endforeach/, '<option>Materials</option>')
++    .replace(/@foreach\(\$customers[^\n]*\n[\s\S]*?@endforeach/, '<option value="1">Buyer</option>')
++    .replace(/@selected\([^\n]*?\)(?=>)/g, '')
++    .replace(/\{\{[\s\S]*?\}\}/g, '')
++    .replace('data-checkout=""', 'data-checkout="/checkout"').replace('data-catalog=""', 'data-catalog="/catalog"')
++    .replace('data-zone-url=""', 'data-zone-url="/zone"').replace('data-reverse-url=""', 'data-reverse-url="https://fixture.test/reverse"');
++const fixture = `
++window.errors = []; addEventListener('error', e => errors.push(e.message));
++window.staffPosData = {products: Array.from({length: 30}, (_, i) => ({id: i + 1, name: 'Product ' + (i + 1), category: 'Materials', price: 100, stock: 10, stock_unit: 'bags'})), customers: [{id: 1, name: 'Buyer', phone: '09171234567', address: 'Silang, Cavite'}], draft: null};
++if (location.search.includes('draft')) staffPosData.draft = {id: 12, version: 2, items: [{product_id: 1, name: 'Product 1', quantity: 2, discount_percent: 10}]};
++window.mapResizes = 0; window.mapEvents = {}; window.saves = [];
++const point = {lat: 14.2, lng: 120.9, wrap() {return this;}};
++const map = {setView() {return this;}, on(n, fn) {mapEvents[n] = fn;}, invalidateSize() {mapResizes++;}, removeLayer() {}, getCenter() {return point;}};
++window.L = {map: () => map, tileLayer: () => ({addTo() {}}), latLng: () => point, marker: () => ({addTo() {return this;}, on() {}, setLatLng() {}, dragging: {enable() {}, disable() {}}})};
++window.fetch = async (url, options = {}) => {
++ const json = data => new Response(JSON.stringify(data), {headers: {'Content-Type': 'application/json'}});
++ if (url === '/catalog') return json(staffPosData.products);
++ if (url === '/checkout') {saves.push(JSON.parse(options.body)); await new Promise(r => setTimeout(r, 150)); return new Response(JSON.stringify({message: 'Fixture save rejected for retry testing.'}), {status: 422, headers: {'Content-Type': 'application/json'}});}
++ if (url === '/zone') return json({success: true, zone: {zone_name: 'Silang', fee: 500}});
++ return json({features: [{geometry: {coordinates: [120.9, 14.2]}, properties: {city: 'Silang', state: 'Cavite'}}]});
++};`;
++const html = `<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width"><meta name="csrf-token" content="fixture"><style>${['public/css/staff/staff-dashboard.css', 'public/css/staff/staff-workspace.css', 'public/css/staff/delivery-map.css', 'public/css/staff/pos-workflow.css'].map(read).join('\n')}</style><main class="workspace-main"><header class="workspace-heading"><h1>Point of Sale</h1></header>${markup}</main><script>${fixture}</script><script>${read('public/js/staff-delivery-map.js')}</script><script>${read('public/js/staff-pos.js')}</script>`;
++const server = http.createServer((req, res) => {res.setHeader('Content-Type', 'text/html'); res.end(html);});
++const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'tmta-pos-browser-'));
++let browser;
++let socket;
++(async () => {
++    await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
++    browser = spawn(process.env.CHROME_PATH || 'C:/Program Files/Google/Chrome/Application/chrome.exe', ['--headless=new', '--no-first-run', '--no-default-browser-check', '--remote-debugging-port=0', '--user-data-dir=' + profile, 'about:blank'], {windowsHide: true, stdio: ['ignore', 'ignore', 'pipe']});
++    const endpoint = await new Promise((resolve, reject) => {
++        let output = '';
++        browser.on('error', reject);
++        browser.stderr.on('data', chunk => {output += chunk; const match = output.match(/DevTools listening on (ws:\/\/[^\s]+)/); if (match) resolve(match[1]);});
++        setTimeout(() => reject(new Error('Chrome launch timed out')), 15000).unref();
++    });
++    const targets = await fetch(new URL('/json/list', endpoint.replace('ws:', 'http:'))).then(r => r.json());
++    socket = new WebSocket(targets.find(t => t.type === 'page').webSocketDebuggerUrl);
++    await new Promise(resolve => socket.addEventListener('open', resolve, {once: true}));
++    let id = 0; const pending = new Map();
++    socket.addEventListener('message', e => {const value = JSON.parse(e.data); if (pending.has(value.id)) {pending.get(value.id)(value); pending.delete(value.id);}});
++    const send = (method, params = {}) => new Promise(resolve => {const key = ++id; pending.set(key, resolve); socket.send(JSON.stringify({id: key, method, params}));});
++    const evaluate = async expression => {
++        const result = await send('Runtime.evaluate', {expression, awaitPromise: true, returnByValue: true});
++        if (result.result.exceptionDetails) throw new Error(result.result.exceptionDetails.exception?.description || result.result.exceptionDetails.text);
++        return result.result.result.value;
++    };
++    const navigate = async (suffix = '') => {
++        await send('Page.navigate', {url: 'http://127.0.0.1:' + server.address().port + '/' + suffix});
++        for (let attempt = 0; attempt < 100; attempt++) {
++            if (await evaluate('Boolean(document.querySelector(".catalog-card"))')) return;
++            await new Promise(r => setTimeout(r, 30));
++        }
++        throw new Error('POS did not initialize');
++    };
++    await send('Emulation.setDeviceMetricsOverride', {width: 1440, height: 900, deviceScaleFactor: 1, mobile: false});
++    await navigate();
++    console.log(await evaluate(`(async () => {
++        const assert = (value, message) => {if (!value) throw new Error(message);};
++        const byId = id => document.getElementById(id);
++        const click = selector => document.querySelector(selector).click();
++        const edit = (id, value) => {byId(id).value = value; byId(id).dispatchEvent(new Event('input', {bubbles: true}));};
++        const wait = () => new Promise(r => setTimeout(r, 550));
++        assert(!errors.length, errors.join('; '));
++        assert(document.querySelectorAll('[id]').length === new Set([...document.querySelectorAll('[id]')].map(n => n.id)).size, 'Duplicate IDs');
++        click('#tab-payment'); assert(!byId('step-order').hidden && !byId('posError').hidden, 'Empty cart navigation validation');
++        click('.catalog-card'); click('.catalog-card');
++        assert(byId('itemCount').textContent === '2', 'Cart quantity');
++        click('#tab-customer'); assert(!byId('step-customer').hidden, 'Customer tab');
++        assert(byId('deliveryDetails').hidden, 'Walk-in delivery fields hidden');
++        byId('customerId').value = '1'; byId('customerId').dispatchEvent(new Event('change'));
++        assert(byId('customerPhone').value === '09171234567', 'Saved customer contact');
++        edit('orderType', 'Delivery'); await wait();
++        assert(!byId('deliveryDetails').hidden && byId('deliveryFee').value === '500.00', 'Saved address zone lookup');
++        assert(byId('grandTotal').textContent.includes('700.00'), 'Shared delivery total');
++        click('#tab-payment'); edit('paymentMethod', 'Online'); edit('amountTendered', '700');
++        click('[data-save="checkout"]'); assert(byId('paymentReference').getAttribute('aria-invalid') === 'true', 'Online reference validation');
++        edit('paymentReference', 'REF-123'); edit('orderNotes', 'Keep this note');
++        click('#tab-order'); click('#tab-payment');
++        assert(byId('orderNotes').value === 'Keep this note' && byId('amountTendered').value === '700', 'Payment retained across tabs');
++        click('#tab-customer'); const resizes = mapResizes; click('#tab-payment'); click('#tab-customer'); await wait(); assert(mapResizes > resizes, 'Map resized on tab return');
++        edit('deliveryAddress', 'Manual Silang address'); await wait(); assert(byId('deliveryZoneName').textContent === 'Silang', 'Manual address zone');
++        mapEvents.click({latlng: point}); await wait(); assert(byId('deliveryAddress').value.includes('Silang'), 'Map pin fills address');
++        click('#tab-payment'); edit('paymentMethod', 'Cash'); edit('amountTendered', '800'); assert(byId('changeDue').textContent.includes('100.00'), 'Cash change');
++        click('[data-save="checkout"]'); click('[data-save="checkout"]'); await wait(); assert(saves.length === 1, 'Duplicate save prevented');
++        assert(saves[0].reference === 'REF-123' && saves[0].customer_id === '1' && saves[0].items[0].quantity === 2, 'Original checkout payload retained');
++        edit('paymentMethod', 'Charge'); assert(byId('amountTendered').disabled, 'Charge disables amount');
++        click('[data-save="hold"]'); await wait(); assert(saves[1].action === 'hold', 'Hold order action');
++        click('[data-save="quote"]'); await wait(); assert(saves[2].action === 'quote', 'Quotation action');
++        click('#refreshCatalog'); await wait(); assert(byId('itemCount').textContent === '2', 'Catalog refresh retains cart');
++        assert(!errors.length, errors.join('; '));
++        return 'PASS: cart, navigation, saved customer, delivery, map pin/resize, cash/online/charge, persistence, duplicate save, hold, quotation, refresh';
++    })()`));
++    if (process.env.POS_SCREENSHOT) {
++        await evaluate('document.getElementById("tab-order").click()');
++        const capture = await send('Page.captureScreenshot', {format: 'png'});
++        fs.writeFileSync(process.env.POS_SCREENSHOT, Buffer.from(capture.result.data, 'base64'));
++    }
++    for (const width of [1440, 1024, 768, 390]) {
++        await send('Emulation.setDeviceMetricsOverride', {width, height: 900, deviceScaleFactor: 1, mobile: width < 600});
++        console.log(await evaluate(`(() => {const app = document.getElementById('posApp'); const box = app.getBoundingClientRect(); if (app.scrollWidth > app.clientWidth + 1 || box.bottom > 901) throw new Error('Layout overflow at ${width}'); return 'PASS: ${width}px layout';})()`));
++    }
++    // Avoid the unsaved-changes prompt during fixture reload.
++    await evaluate('document.getElementById("clearCart").click = () => {}; window.onbeforeunload = null;');
++    await send('Page.handleJavaScriptDialog', {accept: true});
++    await send('Page.addScriptToEvaluateOnNewDocument', {source: 'window.confirm = () => true;'});
++    await evaluate('window.confirm = () => true; document.getElementById("clearCart").dispatchEvent(new MouseEvent("click"));');
++    await navigate('?draft');
++    console.log(await evaluate(`(() => {if (document.getElementById('itemCount').textContent !== '2' || !document.getElementById('discountTotal').textContent.includes('20.00')) throw new Error('Draft not restored'); return 'PASS: resumed draft and discount totals';})()`));
++})().catch(error => {console.error(error); process.exitCode = 1;}).finally(() => {
++    socket?.close(); browser?.kill(); server.close();
++    // Chrome may still hold profile files briefly; the OS temp directory owns them.
++});

@@ -72,6 +72,7 @@
         <aside class="login-brand" aria-label="TMTA Hardware">
             <div class="brand-art" aria-hidden="true"><img src="{{ asset('images/logo.png') }}" alt=""></div>
             <div class="brand-copy">
+                <img class="brand-logo" src="{{ asset('images/logo.png') }}" alt="TMTA Hardware logo">
                 <p class="brand-eyebrow">TMTA HARDWARE</p>
                 <h2>Welcome<br><em>back.</em></h2>
                 <p class="brand-description">Your orders, quotes and supplies are exactly where you left them.</p>

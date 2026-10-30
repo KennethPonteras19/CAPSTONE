@@ -137,23 +137,11 @@
         </button>
     </div>
 
-    <div class="stats-container">
-        <div class="stat-card">
-            <div class="stat-number">{{ $pendingCount }}</div>
-            <div class="stat-label">Pending Orders</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-number">{{ $orderedCount }}</div>
-            <div class="stat-label">Ordered</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-number">{{ $receivedCount }}</div>
-            <div class="stat-label">Received</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-number">{{ $totalCount }}</div>
-            <div class="stat-label">Total</div>
-        </div>
+    <div class="ui-metrics">
+        <x-metric label="Pending Orders" :value="$pendingCount" tone="warning" icon="fa-clock" />
+        <x-metric label="Ordered" :value="$orderedCount" tone="info" icon="fa-truck" />
+        <x-metric label="Received" :value="$receivedCount" tone="success" icon="fa-circle-check" />
+        <x-metric label="Total" :value="$totalCount" tone="info" icon="fa-boxes-stacked" />
     </div>
 
     <div class="search-container">
@@ -513,13 +501,22 @@ window.addEventListener('click', function(event) {
     }
 });
 
-function updateDateTime() {
+ // DIGITAL CLOCK
+        function updateDateTime() {
     const now = new Date();
+    const date = now.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+    });
+    const time = now.toLocaleTimeString();
     const element = document.getElementById('datetime');
-    if (element) {
-        element.textContent = now.toLocaleDateString() + ' | ' + now.toLocaleTimeString();
-    }
+
+    if (element) element.textContent = date + ' | ' + time;
 }
+
+setInterval(updateDateTime, 1000);
+updateDateTime();
 
 setInterval(updateDateTime, 1000);
 updateDateTime();

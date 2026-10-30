@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $definition['label'] }} · {{ $order->number }}</title>
     <link rel="stylesheet" href="{{ asset('css/receipts.css') }}?v={{ filemtime(public_path('css/receipts.css')) }}">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v={{ filemtime(public_path('css/app.css')) }}">
 </head>
 <body class="receipt-preview">
     <nav class="print-toolbar no-print">
-        <a href="{{ $backUrl ?? route($prefix.'.index', ['order' => $order->id]) }}">{{ isset($backUrl) ? '← Back' : '← Receipt Templates' }}</a>
+        <x-back-link :fallback="$backUrl ?? route($prefix.'.index', ['order' => $order->id])" :label="isset($backUrl) ? 'Back' : 'Back to Receipt Templates'" />
         <button type="button" onclick="window.print()">Print / Save PDF</button>
     </nav>
     @if($template === 'return')<p class="preview-note no-print">Return form pending approval. Verify previous returns and obtain authorization before processing. No return, refund, or stock adjustment is saved by this form.</p>@endif

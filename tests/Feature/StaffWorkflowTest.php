@@ -39,6 +39,18 @@ class StaffWorkflowTest extends TestCase
         return Customer::create(['name' => 'Buyer One', 'phone' => '09171234567', 'address' => 'Silang, Cavite', 'is_active' => true]);
     }
 
+    public function test_order_back_link_keeps_listing_filters_and_has_a_safe_fallback(): void
+    {
+        $this->postJson(route('pos.checkout'), $this->payload($this->product()))->assertOk();
+        $order = Order::firstOrFail();
+        $listing = route('orders', ['status' => 'Completed', 'page' => 2]);
+        $this->from($listing)->get(route('staff.orders.show', $order))
+            ->assertOk()->assertSee('href="'.e($listing).'"', false);
+        $this->from('https://outside.example/orders')->get(route('staff.orders.show', $order))
+            ->assertOk()->assertSee('href="'.route('orders').'"', false)
+            ->assertDontSee('outside.example');
+    }
+
     public function test_checkout_uses_database_prices_quantities_cashier_and_updates_every_screen(): void
     {
         $product = $this->product();

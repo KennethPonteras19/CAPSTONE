@@ -25,30 +25,14 @@
         </div>
     </header>
 
-    <section class="cards">
-        <article class="card">
-            <div class="label">System Modules</div>
-            <div class="value">{{ $systemModules ?? 4 }}</div>
-            <div class="hint">Core superadmin modules are active.</div>
-        </article>
+    <section class="ui-metrics">
+        <x-metric label="System Modules" :value="$systemModules ?? 4" tone="info" icon="fa-layer-group" hint="Core superadmin modules are active." />
 
-        <article class="card">
-            <div class="label">Active Users</div>
-            <div class="value">{{ $activeUsersCount ?? 0 }}</div>
-            <div class="hint">Accounts currently enabled in system access.</div>
-        </article>
+        <x-metric label="Active Users" :value="$activeUsersCount ?? 0" tone="success" icon="fa-users" hint="Accounts currently enabled in system access." />
 
-        <article class="card">
-            <div class="label">Warnings Today</div>
-            <div class="value">{{ $warningsToday ?? 0 }}</div>
-            <div class="hint">Review recent logs for flagged events.</div>
-        </article>
+        <x-metric label="Warnings Today" :value="$warningsToday ?? 0" tone="warning" icon="fa-triangle-exclamation" hint="Review recent logs for flagged events." />
 
-        <article class="card">
-            <div class="label">Inactive Accounts</div>
-            <div class="value">{{ $inactiveUsersCount ?? 0 }}</div>
-            <div class="hint">Accounts currently disabled in system.</div>
-        </article>
+        <x-metric label="Inactive Accounts" :value="$inactiveUsersCount ?? 0" tone="neutral" icon="fa-user-slash" hint="Accounts currently disabled in system." />
     </section>
 
     <section class="layout-two">

@@ -53,6 +53,27 @@
 .delivery-zone-info p {
     margin: 4px 0;
 }
+.delivery-map-tools summary { cursor: pointer; padding: 10px 0; font-weight: 600; }
+.delivery-map-tools > :not(summary) { margin-bottom: 9px; }
+.delivery-map-tools .delivery-map-help { margin-bottom: 9px; }
+
+.delivery-map-dialog {
+    width: min(1100px, calc(100vw - 32px)); max-height: calc(100dvh - 32px);
+    padding: 20px; border: 1px solid #aab8c8; border-radius: 12px;
+    background: #fff; color: #211d25; overflow-y: auto;
+    box-shadow: 0 16px 48px #142d4e30;
+    opacity: 0; transition: opacity 160ms ease, display 160ms allow-discrete, overlay 160ms allow-discrete;
+}
+.delivery-map-dialog[open] { opacity: 1; }
+@starting-style { .delivery-map-dialog[open] { opacity: 0; } }
+.delivery-map-dialog::backdrop { background: #142d4e80; }
+.delivery-dialog-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 16px; }
+.delivery-dialog-header h2 { margin: 0; }
+.delivery-map-dialog #deliveryMap { height: clamp(320px, 55dvh, 650px); }
+.delivery-search-results { max-height: 210px; overflow-y: auto; }
+@media (max-width: 600px) {
+    .delivery-map-dialog { width: calc(100vw - 16px); max-height: calc(100dvh - 16px); padding: 14px; }
+}
 
 @media (max-width: 420px) {
     .delivery-search-row {
